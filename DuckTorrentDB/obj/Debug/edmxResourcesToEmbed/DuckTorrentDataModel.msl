@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DuckTorrentDBModelStoreContainer" CdmEntityContainer="DuckTorrentDBEntities">
+    <EntitySetMapping Name="Files">
+      <EntityTypeMapping TypeName="DuckTorrentDBModel.File">
+        <MappingFragment StoreEntitySet="Files">
+          <ScalarProperty Name="Port" ColumnName="Port" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="IP" ColumnName="IP" />
+          <ScalarProperty Name="FIleName" ColumnName="FIleName" />
+          <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="DuckTorrentDBModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

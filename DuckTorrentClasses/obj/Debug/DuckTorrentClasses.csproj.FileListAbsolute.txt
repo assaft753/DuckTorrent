@@ -1,0 +1,7 @@
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClasses\obj\Debug\DuckTorrentClasses.csprojResolveAssemblyReference.cache
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClasses\obj\Debug\DuckTorrentClasses.csproj.CoreCompileInputs.cache
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClasses\bin\Debug\DuckTorrentClasses.pdb
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClasses\obj\Debug\DuckTorrentClasses.pdb
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClasses\bin\Debug\DuckTorrentClasses.dll.config
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClasses\bin\Debug\DuckTorrentClasses.dll
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClasses\obj\Debug\DuckTorrentClasses.dll

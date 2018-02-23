@@ -1,0 +1,14 @@
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentDB\bin\Debug\DuckTorrentDB.pdb
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentDB\bin\Debug\EntityFramework.dll
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentDB\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentDB\bin\Debug\EntityFramework.xml
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentDB\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentDB\obj\Debug\DuckTorrentDB.csprojResolveAssemblyReference.cache
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentDB\obj\Debug\DuckTorrentDB.csproj.CoreCompileInputs.cache
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentDB\obj\Debug\DuckTorrentDB.pdb
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentDB\bin\Debug\DuckTorrentClasses.pdb
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentDB\bin\Debug\DuckTorrentDB.dll.config
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentDB\bin\Debug\DuckTorrentDB.dll
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentDB\bin\Debug\DuckTorrentClasses.dll
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentDB\bin\Debug\DuckTorrentClasses.dll.config
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentDB\obj\Debug\DuckTorrentDB.dll
