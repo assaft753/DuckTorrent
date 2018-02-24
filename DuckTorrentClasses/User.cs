@@ -13,9 +13,9 @@ namespace DuckTorrentClasses
         public int Port { get; set; }
         public String Ip { get; set; }
 
-        public User(string userName, string password, List<File> files, int port, string ip)
+        public User(UserDetails userDetails, List<File> files, int port, string ip)
         {
-            UserInfo = new UserDetails(userName, password);
+            UserInfo = userDetails;
             Files = files;
             Port = port;
             Ip = ip;

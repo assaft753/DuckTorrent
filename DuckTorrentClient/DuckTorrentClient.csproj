@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -100,6 +101,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DuckTorrentClasses\DuckTorrentClasses.csproj">
+      <Project>{12d0e8de-f0c1-441e-b098-a26bbb26686c}</Project>
+      <Name>DuckTorrentClasses</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DuckTorrentService\DuckTorrentService.csproj">
+      <Project>{A612F035-C48A-4040-A820-BDFD89FF3921}</Project>
+      <Name>DuckTorrentService</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

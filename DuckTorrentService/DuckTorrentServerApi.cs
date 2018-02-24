@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Text;
 using DuckTorrentClasses;
 using DuckTorrentDB;
@@ -11,12 +12,36 @@ namespace DuckTorrentService
 {
     public class DuckTorrentServerApi : IDuckTorrentServerApi
     {
+        public string CheckUserExists(string userByXML)
+        {
+            string toPrint = "";
+            try
+            {
+                XMLHandler xMLHandler = new XMLHandler();
+                var user = xMLHandler.Deserialize<UserDetails>(userByXML);
+                toPrint += "User Name: " + user.UserName + " Check If User Exists..... ";
+                var userHandler = new ClientHandler();
+                userHandler.CheckUser(user.UserName, user.Password);
+                toPrint += "User Exists ";
+                Console.WriteLine(toPrint);
+                return "200";
+            }
+            catch (Exception ex)
+            {
+                toPrint += "400" + " " + ex.Message;
+                Console.WriteLine(toPrint);
+                return "400" + " " + ex.Message;
+            }
+        }
+
         public string SearchFile(string fileByXML)
         {
+            string toPrint = "";
             try
             {
                 XMLHandler xMLHandler = new XMLHandler();
                 var fileSearch = xMLHandler.Deserialize<FileSearch>(fileByXML);
+                toPrint += "User: " + fileSearch.UserInfo.UserName + " Searching File: " + fileSearch.FileName + ".....";
                 FileHandler fileHandler = new FileHandler();
                 ClientHandler clientHandler = new ClientHandler();
                 if (clientHandler.CheckUser(fileSearch.UserInfo.UserName, fileSearch.UserInfo.Password) == true)
@@ -29,56 +54,66 @@ namespace DuckTorrentService
                         {
                             respondList.Add(x.Value);
                         }
+                        Console.WriteLine(toPrint + " Matches Found");
                         return xMLHandler.Serialize<List<FileSeed>>(respondList);
                     }
                 }
+                Console.WriteLine(toPrint + " Matches Not Found");
                 return null;
             }
             catch (Exception ex)
             {
-                return "400" + " " + ex.Message;
+                toPrint += " 400" + " " + ex.Message;
+                Console.WriteLine(toPrint);
+                return " 400" + " " + ex.Message;
             }
         }
 
         public string SignIn(string userByXML)
         {
-            /*try
+            string toPrint = "";
+            try
             {
+
                 XMLHandler xMLHandler = new XMLHandler();
                 var user = xMLHandler.Deserialize<DuckTorrentClasses.User>(userByXML);
+                toPrint += "User Name: " + user.UserInfo.UserName + " Trying To Sign In.... ";
                 ClientHandler clientHandler = new ClientHandler();
-                if (clientHandler.CheckUser(user.UserInfo.UserName, user.UserInfo.Password) == true)
-                {
-                    clientHandler.ClientOn(user.UserInfo.UserName, user.Ip, user.Port, user.Files);
-                    return "200";
-                }
-                return "300";
+                clientHandler.CheckUser(user.UserInfo.UserName, user.UserInfo.Password);
+                clientHandler.ClientOn(user.UserInfo.UserName, user.Ip, user.Port, user.Files);
+                toPrint += "User Is Now Online And Signed In ";
+                Console.WriteLine(toPrint);
+                return "200";
             }
             catch (Exception ex)
             {
-                return "400" + " " + ex.Message;
-            }*/
-            Console.WriteLine("Enter2");
-            return userByXML;
+                toPrint += " 400" + " " + ex.Message;
+                Console.WriteLine(toPrint);
+                return " 400" + " " + ex.Message;
+            }
+
         }
 
         public string SignOut(string userByXML)
         {
+            string toPrint = "";
             try
             {
                 XMLHandler xMLHandler = new XMLHandler();
                 var user = xMLHandler.Deserialize<DuckTorrentClasses.UserDetails>(userByXML);
+                toPrint += "User Name: " + user.UserName + " Trying To Sign Out.... ";
                 ClientHandler clientHandler = new ClientHandler();
-                if (clientHandler.CheckUser(user.UserName, user.Password) == true)
-                {
-                    clientHandler.ClientOff(user.UserName, user.Password);
-                    return "200";
-                }
-                return "300";
+                clientHandler.CheckUser(user.UserName, user.Password);
+                clientHandler.ClientOff(user.UserName, user.Password);
+                toPrint += "User Is Now Offline And Signed Out ";
+                Console.WriteLine(toPrint);
+                return "200";
             }
             catch (Exception ex)
             {
-                return "400" + " " + ex.Message;
+                toPrint += " 400" + " " + ex.Message;
+                Console.WriteLine(toPrint);
+                return " 400" + " " + ex.Message;
             }
 
         }

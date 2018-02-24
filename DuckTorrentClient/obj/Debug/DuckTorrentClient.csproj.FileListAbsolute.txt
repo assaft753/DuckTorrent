@@ -15,3 +15,14 @@ C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\DuckT
 C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient.csproj.CoreCompileInputs.cache
 C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient.exe
 C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient.pdb
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\DuckTorrentClasses.dll
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\DuckTorrentService.exe
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\DuckTorrentDB.dll
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\EntityFramework.dll
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\DuckTorrentClasses.pdb
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\DuckTorrentClasses.dll.config
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\DuckTorrentService.pdb
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\DuckTorrentService.exe.config
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\DuckTorrentDB.pdb
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\DuckTorrentDB.dll.config
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\EntityFramework.xml

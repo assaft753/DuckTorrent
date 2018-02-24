@@ -61,12 +61,9 @@ namespace DuckTorrentDB
                 var files = from f in db.Files
                             where f.UserName == userName
                             select f;
-
-                foreach (var item in files)
-                {
-                    db.Files.Remove(item);
-                    db.SaveChanges();
-                }
+                var l = files.ToList();
+                db.Files.RemoveRange(files);
+                db.SaveChanges();
             }
 
         }

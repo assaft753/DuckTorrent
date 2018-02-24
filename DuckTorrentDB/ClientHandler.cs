@@ -92,7 +92,7 @@ namespace DuckTorrentDB
             return users.Count();
         }
 
-        public bool CheckUser(String userName, string password)
+        public Boolean CheckUser(String userName, string password)
         {
             if (!FindUser(userName))
                 throw new Exception("User name does not exiest");

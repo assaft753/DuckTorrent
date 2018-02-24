@@ -15,8 +15,10 @@ namespace ConsoleApp1
         {
             using (ServiceHost sh = new ServiceHost((typeof(DuckTorrentServerApi))))
             {
+
                 sh.Open();
-                Console.ReadLine();
+                Console.WriteLine("SSS");
+                while (1 == 1) { }
             }
         }
     }

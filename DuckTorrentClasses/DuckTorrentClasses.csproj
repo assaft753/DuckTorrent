@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigDetails.cs" />
     <Compile Include="File.cs" />
     <Compile Include="FileSearch.cs" />
     <Compile Include="FileSeed.cs" />
