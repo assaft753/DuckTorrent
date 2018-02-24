@@ -4,6 +4,8 @@
     <UserName>assaf</UserName>
     <Password>123</Password>
   </User>
-  <Port>8006</Port>
-  <ServerIP>localhost</ServerIP>
+  <Port>30</Port>
+  <ServerIP>127.0.0.1</ServerIP>
+  <DownloadPath>C:\Users\assaftayouri\Desktop\Test</DownloadPath>
+  <UploadPath>C:\Users\assaftayouri\Desktop\Test</UploadPath>
 </ConfigDetails>

@@ -1,6 +1,9 @@
-﻿using System;
+﻿using DuckTorrentClasses;
+using DuckTorrentService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,9 +23,16 @@ namespace ClientApplication
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private XMLHandler xMLHandler = new XMLHandler();
+        private ConfigDetails ConfigDetails;
+        private IDuckTorrentServerApi ServerProxy;
+        private TcpListener TcpListener;
+        public MainWindow(ConfigDetails configDetails, IDuckTorrentServerApi serverProxy, TcpListener tcpListener)
         {
             InitializeComponent();
+            this.ConfigDetails = configDetails;
+            this.ServerProxy = serverProxy;
+            this.TcpListener = tcpListener;
         }
 
         private void listViewResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -73,7 +83,7 @@ namespace ClientApplication
         // this method can be removed
         private void file_name_textBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            
+
         }
 
         //when window is closing update the server that user is out
@@ -84,12 +94,12 @@ namespace ClientApplication
 
             s.Close();
             s.Dispose();
-        */    
-         }
+        */
+        }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-           // do nothing
+            // do nothing
 
         }
 

@@ -13,13 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Net;
 using System.Net.Sockets;
-//using ObjectsLibrary;
 using System.IO;
 using System.Xml;
 using System.ServiceModel;
 using DuckTorrentService;
 using DuckTorrentClasses;
-//using Newtonsoft.Json;
+using System.Windows.Forms;
 
 namespace ClientApplication
 {
@@ -40,23 +39,24 @@ namespace ClientApplication
             InitializeComponent();
             try
             {
-                /*{
-                    var con = new ConfigDetails()
-                    {
-                        User = new UserDetails("assaf", "1234"),
-                        ServerIP = "localhost",
-                        Port = 8090
-                    };*/
-                //var str = xMLHandler.Serialize<ConfigDetails>(con);
-                //System.IO.File.WriteAllText(CONFIGFILE, str);
+                /*var con = new ConfigDetails()
+                {
+                    User = new UserDetails("assaf", "1234"),
+                    ServerIP = "127.0.0.1",
+                    Port = 8005,
+                    DownloadPath = @"C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug",
+                    UploadPath = @"C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug"
+                };
+                var str = xMLHandler.Serialize<ConfigDetails>(con);
+                System.IO.File.WriteAllText(CONFIGFILE, str);*/
                 CheckXMLConfigValidation();
-                OpenServerSocket();
-                CheckUserValidtion();
-                OpenTcpListener();
+                InitDetailsAndConnections();
+                MoveToMainWindows();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                System.Windows.MessageBox.Show(ex.Message);
+                PutData();
             }
             /*XMLHandler xMLHandler = new XMLHandler();
             var con = new ConfigDetails()
@@ -73,16 +73,76 @@ namespace ClientApplication
 
         }
 
+        private void MoveToMainWindows()
+        {
+            SignInUser();
+            MainWindow mainWindow = new MainWindow(this.ConfigDetails, this.ServerProxy, this.TcpListener);
+            mainWindow.Show();
+            this.Close();
+        }
+
+        private void InitDetailsAndConnections()
+        {
+            CheckInputDetails();
+            OpenServerSocket();
+            CheckUserValidtion();
+            OpenTcpListener();
+        }
+
+        private void PutData()
+        {
+            this.username_textBox.Text = ConfigDetails.User.UserName;
+            this.uploadPath_Textbox.Text = ConfigDetails.UploadPath;
+            this.downloadPath_Textbox.Text = ConfigDetails.DownloadPath;
+            this.serverip_Textbox.Text = ConfigDetails.ServerIP;
+            this.serverport_Textbox.Text = ConfigDetails.Port.ToString();
+
+        }
+
+        private void CheckInputDetails()
+        {
+            if (this.ConfigDetails.Port == 0)
+            {
+                throw new Exception("Port Cant Be 0");
+            }
+            IPAddress iPAddress = null;
+            if (this.ConfigDetails.ServerIP == "" || IPAddress.TryParse(this.ConfigDetails.ServerIP, out iPAddress) == false)
+            {
+                throw new Exception("Not Valid IP Address");
+            }
+            if (this.ConfigDetails.User.Password == "" || this.ConfigDetails.User.UserName == "")
+            {
+                throw new Exception("Not Valid User Login");
+            }
+            if (Directory.Exists(this.ConfigDetails.DownloadPath) == false)
+            {
+                throw new Exception("No Such Download Directory");
+            }
+            if (Directory.Exists(this.ConfigDetails.UploadPath) == false)
+            {
+                throw new Exception("No Such Upload Directory");
+            }
+
+        }
+
         private void OpenTcpListener()
         {
-            IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, ConfigDetails.Port);
-            TcpListener listener = new TcpListener(endPoint);
-            listener.Start();
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Loopback, ConfigDetails.Port);
+            this.TcpListener = new TcpListener(endPoint);
+            this.TcpListener.Start();
         }
 
         private void CheckUserValidtion()
         {
             string serverRespond = ServerProxy.CheckUserExists(this.xMLHandler.Serialize<UserDetails>(ConfigDetails.User));
+            if (CheckIfErrorFromServer(serverRespond) == false)
+            {
+                throw new Exception(serverRespond);
+            }
+        }
+
+        private Boolean CheckIfErrorFromServer(string serverRespond)
+        {
             string answerCode = "";
             foreach (Char c in serverRespond.Take(3))
             {
@@ -90,8 +150,9 @@ namespace ClientApplication
             }
             if (answerCode.Equals(BAD))
             {
-                throw new Exception(serverRespond);
+                return false;
             }
+            return true;
         }
 
         private void OpenServerSocket()
@@ -103,46 +164,117 @@ namespace ClientApplication
 
         private void CheckXMLConfigValidation()
         {
-            if (System.IO.File.Exists(CONFIGFILE) == false)
+            try
             {
-                throw new Exception("Config File Not Found In " + Directory.GetCurrentDirectory());
-            }
-            String xmlfilestring = "";
-            string line;
-            using (StreamReader sr = new StreamReader(CONFIGFILE))
-            {
-
-                while ((line = sr.ReadLine()) != null)
+                if (System.IO.File.Exists(CONFIGFILE) == false)
                 {
-                    xmlfilestring += line;
+                    throw new Exception("Config File Not Found In " + Directory.GetCurrentDirectory());
+                }
+                String xmlfilestring = "";
+                string line;
+                using (StreamReader sr = new StreamReader(CONFIGFILE))
+                {
+
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        xmlfilestring += line;
+                    }
+                }
+                this.ConfigDetails = xMLHandler.Deserialize<ConfigDetails>(xmlfilestring);
+            }
+            catch (Exception ex)
+            {
+                this.ConfigDetails = new ConfigDetails()
+                {
+                    User = new UserDetails()
+                };
+                throw ex;
+            }
+        }
+
+        private void UploadBtn_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog uploadDirectoryBrowser = new FolderBrowserDialog();
+            DialogResult answer = uploadDirectoryBrowser.ShowDialog();
+            if (answer == System.Windows.Forms.DialogResult.OK)
+            {
+                this.uploadPath_Textbox.Text = uploadDirectoryBrowser.SelectedPath;
+            }
+        }
+
+        private void DownloadBtn_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog downloadDirectoryBrowser = new FolderBrowserDialog();
+            DialogResult answer = downloadDirectoryBrowser.ShowDialog();
+            if (answer == System.Windows.Forms.DialogResult.OK)
+            {
+                this.downloadPath_Textbox.Text = downloadDirectoryBrowser.SelectedPath;
+            }
+        }
+
+        private void LogInBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                UpdateConfiguration();
+                InitDetailsAndConnections();
+                var str = xMLHandler.Serialize<ConfigDetails>(this.ConfigDetails);
+                System.IO.File.WriteAllText(CONFIGFILE, str);
+                MoveToMainWindows();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void SignInUser()
+        {
+            string ip = GetIP();
+            var files = GetFiles();
+            User user = new User(this.ConfigDetails.User, files, this.ConfigDetails.Port, ip);
+            var serverRespond = ServerProxy.SignIn(this.xMLHandler.Serialize<User>(user));
+            if (CheckIfErrorFromServer(serverRespond) == false)
+            {
+                throw new Exception(serverRespond);
+            }
+        }
+
+        private string GetIP()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
                 }
             }
-            this.ConfigDetails = xMLHandler.Deserialize<ConfigDetails>(xmlfilestring);
+            return "";
         }
 
-        private void updateBtn_Click(object sender, RoutedEventArgs e)
+        private List<DuckTorrentClasses.File> GetFiles()
         {
-
+            var paths = Directory.GetFiles(this.ConfigDetails.UploadPath);
+            List<DuckTorrentClasses.File> files = new List<DuckTorrentClasses.File>();
+            foreach (var path in paths)
+            {
+                DuckTorrentClasses.File file = new DuckTorrentClasses.File();
+                file.FileSize = new System.IO.FileInfo(path).Length;
+                file.FileName = new System.IO.FileInfo(path).Name;
+                files.Add(file);
+            }
+            return files;
         }
 
-        private void Log_In_Btn_Click(object sender, RoutedEventArgs e)
+        private void UpdateConfiguration()
         {
-
-        }
-
-        private void upBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void downBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
+            this.ConfigDetails.User.UserName = username_textBox.Text;
+            this.ConfigDetails.User.Password = password_textBox.Password;
+            this.ConfigDetails.Port = int.Parse(this.serverport_Textbox.Text);
+            this.ConfigDetails.ServerIP = this.serverip_Textbox.Text;
+            this.ConfigDetails.DownloadPath = this.downloadPath_Textbox.Text;
+            this.ConfigDetails.UploadPath = this.uploadPath_Textbox.Text;
         }
     }
 }

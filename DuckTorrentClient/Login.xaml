@@ -11,37 +11,45 @@
     </Window.Effect>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="63*"/>
-            <ColumnDefinition Width="256*"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Border BorderBrush="Black" BorderThickness="0" HorizontalAlignment="Left" Height="218" VerticalAlignment="Top" Width="318" Grid.ColumnSpan="2">
-            <Grid HorizontalAlignment="Left" Height="216" Margin="10,10,0,-8.4" VerticalAlignment="Top" Width="298">
+        <Border BorderBrush="Black" BorderThickness="0" HorizontalAlignment="Left" Height="218" VerticalAlignment="Top" Width="318">
+            <Grid Margin="10,10,10,-84">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="22*"/>
-                    <RowDefinition Height="31*"/>
-                    <RowDefinition Height="32*"/>
-                    <RowDefinition Height="31*"/>
-                    <RowDefinition Height="30*"/>
-                    <RowDefinition Height="33*"/>
                     <RowDefinition Height="10*"/>
-                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height="18*"/>
+                    <RowDefinition Height="27.2"/>
+                    <RowDefinition Height="23*"/>
+                    <RowDefinition Height="35*"/>
+                    <RowDefinition Height="40*"/>
+                    <RowDefinition Height="26*"/>
+                    <RowDefinition Height="14*"/>
+                    <RowDefinition Height="26*"/>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="5*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="135*"/>
                     <ColumnDefinition Width="137*"/>
                 </Grid.ColumnDefinitions>
-                <Label x:Name="username_label" Content="User Name:" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Top" Width="115" Height="36" Grid.RowSpan="2" FontFamily="Showcard Gothic"/>
-                <Label x:Name="password_label" Content="Password:" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Top" Width="115" Height="36" Grid.RowSpan="2" FontFamily="Showcard Gothic"/>
-                <Label x:Name="uploadDir_label" Content="Upload Directory" HorizontalAlignment="Left" Margin="2,33.4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="128" Height="36" Grid.RowSpan="3" FontFamily="Showcard Gothic"/>
-                <Label x:Name="downloadDor_label" Content="Download Directory" HorizontalAlignment="Left" Margin="0,33.4,-8.4,0" Grid.Row="3" VerticalAlignment="Top" Width="158" Height="36" Grid.RowSpan="3" Grid.Column="1" FontFamily="Showcard Gothic"/>
-                <TextBox x:Name="username_textBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="10,4,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="117" TextChanged="textBox1_TextChanged"/>
-                <PasswordBox x:Name="password_textBox" Grid.Column="1" HorizontalAlignment="Left" Margin="10,5.6,0,7.6" Grid.Row="2" Width="117"/>
-                <Button x:Name="uploadBtn" Content="browse" Margin="16,5.6,36.2,0" Grid.Row="5" VerticalAlignment="Top" Click="upBtn_Click" RenderTransformOrigin="-0.928,2.51" Height="21" FontFamily="Showcard Gothic"/>
-                <Button x:Name="downloadBtn" Content="browse" Grid.Column="1" HorizontalAlignment="Left" Margin="35.8,5.6,0,0" Grid.Row="5" VerticalAlignment="Top" Width="82" Click="downBtn_Click" Height="22" FontFamily="Showcard Gothic"/>
+                <Label x:Name="username_label" Content="User Name:" Margin="11,5,22,0" VerticalAlignment="Top" Height="26" FontFamily="Showcard Gothic" Grid.RowSpan="3"/>
+                <Label x:Name="password_label" Content="Password:" HorizontalAlignment="Left" Margin="10,0.5,0,4.5" Grid.Row="2" Width="115" FontFamily="Showcard Gothic"/>
+                <Label x:Name="uploadDir_label" Content="Upload Directory" Margin="18,4.5,24,5" Grid.Row="4" FontFamily="Showcard Gothic" RenderTransformOrigin="0.486,0.775"/>
+                <Label x:Name="downloadDir_label" Content="Download Directory" HorizontalAlignment="Left" Margin="23,5.5,0,7" Grid.Row="4" Width="116" Grid.Column="1" FontFamily="Showcard Gothic"/>
+                <TextBox x:Name="username_textBox" Grid.Column="1" Height="22" Margin="0,0,11,3.5" TextWrapping="Wrap" VerticalAlignment="Bottom"  HorizontalAlignment="Right" Width="139" Grid.RowSpan="2"/>
+                <PasswordBox x:Name="password_textBox" Grid.Column="1" Margin="0,2.5,11,3.5" Grid.Row="2" HorizontalAlignment="Right" Width="139"/>
+                <Button x:Name="uploadBtn" Content="browse" Margin="18,5.6,34,13.4" Grid.Row="5" Click="UploadBtn_Click" RenderTransformOrigin="-0.928,2.51" FontFamily="Showcard Gothic"/>
+                <Button x:Name="downloadBtn" Content="browse" Grid.Column="1" Margin="31,5.6,0,13.4" Grid.Row="5" Click="DownloadBtn_Click" FontFamily="Showcard Gothic" Width="96" HorizontalAlignment="Left"/>
+                <Label x:Name="uploadPath_label" Content="Upload  path" HorizontalAlignment="Left" Margin="-3,38,0,0" Grid.Row="5" VerticalAlignment="Top" Width="128" Height="21" FontFamily="Showcard Gothic" RenderTransformOrigin="0.486,0.775" FontSize="10" Grid.RowSpan="2"/>
+                <Label x:Name="downloadPath_Label" Content="Download path" Margin="-3,14,37,23" Grid.Row="7" FontFamily="Showcard Gothic" FontSize="10" Grid.RowSpan="3"/>
+                <TextBox x:Name="uploadPath_Textbox" HorizontalAlignment="Left" Height="40" Margin="0,6,0,0" Grid.Row="6" TextWrapping="Wrap" VerticalAlignment="Top" Width="298" Grid.ColumnSpan="2" IsReadOnly="True" Grid.RowSpan="2"/>
+                <TextBox x:Name="downloadPath_Textbox" Height="39" Margin="0,15,0,0" Grid.Row="8" TextWrapping="Wrap" VerticalAlignment="Top" Grid.ColumnSpan="2" IsReadOnly="True" RenderTransformOrigin="0.505,0.671" Grid.RowSpan="2" HorizontalAlignment="Left" Width="298"/>
+                <Label x:Name="serverip_Label" Content="Server IP:" HorizontalAlignment="Left" Margin="9,1.5,0,42" Grid.Row="3" Width="115" FontFamily="Showcard Gothic" Grid.RowSpan="2"/>
+                <TextBox x:Name="serverip_Textbox" Grid.Column="1" Margin="10,3,57.6,4.2" Grid.Row="3"/>
+                <TextBox x:Name="serverport_Textbox" Grid.Column="1" Margin="100,3,10.6,4.2" Grid.Row="3"/>
             </Grid>
         </Border>
-        <Button x:Name="Log_In_Btn" Content="Log In" Margin="0,319,64.2,0" VerticalAlignment="Top" Click="updateBtn_Click" HorizontalAlignment="Right" Width="207" Height="47" Grid.ColumnSpan="2" FontSize="24" FontFamily="Showcard Gothic"/>
-        <Label x:Name="error_Label" Content="" HorizontalAlignment="Left" Margin="10,223,0,0" VerticalAlignment="Top" Width="298" Height="89" Grid.ColumnSpan="2"/>
+        <Button x:Name="Log_In_Btn" Content="Log In" Margin="0,319,64.2,0" VerticalAlignment="Top" Click="LogInBtn_Click" HorizontalAlignment="Right" Width="207" Height="47" FontSize="24" FontFamily="Showcard Gothic"/>
 
     </Grid>
 </Window>

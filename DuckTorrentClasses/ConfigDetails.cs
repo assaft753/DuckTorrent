@@ -16,9 +16,9 @@ namespace DuckTorrentClasses
 
         public UserDetails User { get; set; }
         public int Port { get; set; }
-        public string ServerIP { get; set; }
-        public string DownloadPath { get; set; }
-        public string UploadPath { get; set; }
+        public string ServerIP { get; set; } = "";
+        public string DownloadPath { get; set; } = "";
+        public string UploadPath { get; set; } = "";
 
         public ConfigDetails(UserDetails user, int port, string serverIP, string downloadPath, string uploadPath)
         {
