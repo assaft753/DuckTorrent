@@ -1,0 +1,17 @@
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\DuckTorrentClient.exe.config
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\DuckTorrentClient.exe
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\DuckTorrentClient.pdb
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient.csprojResolveAssemblyReference.cache
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\Login.g.cs
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\MainWindow.g.cs
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\App.g.cs
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient_MarkupCompile.cache
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient_MarkupCompile.lref
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\Login.baml
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\MainWindow.baml
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient.g.resources
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient.Properties.Resources.resources
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient.csproj.GenerateResource.Cache
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient.csproj.CoreCompileInputs.cache
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient.exe
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient.pdb
