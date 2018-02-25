@@ -46,7 +46,7 @@ namespace DuckTorrentService
                 ClientHandler clientHandler = new ClientHandler();
                 if (clientHandler.CheckUser(fileSearch.UserInfo.UserName, fileSearch.UserInfo.Password) == true)
                 {
-                    var result = fileHandler.FindFile(fileSearch.FileName);
+                    var result = fileHandler.FindFile(fileSearch.FileName, fileSearch.UserInfo.UserName);
                     if (result != null)
                     {
                         var respondList = new List<FileSeed>();

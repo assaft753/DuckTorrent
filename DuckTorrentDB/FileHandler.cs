@@ -68,12 +68,12 @@ namespace DuckTorrentDB
 
         }
 
-        public Dictionary<String, FileSeed> FindFile(string fileName)
+        public Dictionary<String, FileSeed> FindFile(string fileName, string userName)
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
             {
                 var files = from f in db.Files
-                            where f.FIleName.Contains(fileName)
+                            where f.FIleName.Contains(fileName) && f.UserName != userName
                             group f by f.FIleName into GroupFiles
                             select GroupFiles;
 

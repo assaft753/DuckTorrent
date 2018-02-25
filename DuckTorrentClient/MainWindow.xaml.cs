@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
+using System.ServiceModel;
 
 namespace ClientApplication
 {
@@ -25,14 +27,25 @@ namespace ClientApplication
     {
         private XMLHandler xMLHandler = new XMLHandler();
         private ConfigDetails ConfigDetails;
-        private IDuckTorrentServerApi ServerProxy;
+        private ChannelFactory<IDuckTorrentServerApi> Factory;
         private TcpListener TcpListener;
-        public MainWindow(ConfigDetails configDetails, IDuckTorrentServerApi serverProxy, TcpListener tcpListener)
+        private IDuckTorrentServerApi ServerProxy;
+        public MainWindow(ConfigDetails configDetails, TcpListener tcpListener)
         {
-            InitializeComponent();
-            this.ConfigDetails = configDetails;
-            this.ServerProxy = serverProxy;
-            this.TcpListener = tcpListener;
+            try
+            {
+                InitializeComponent();
+                this.ConfigDetails = configDetails;
+                EndpointAddress endpoint = new EndpointAddress(this.ConfigDetails.GenerateServerIPAdress());
+                ChannelFactory<IDuckTorrentServerApi> factory = new ChannelFactory<IDuckTorrentServerApi>(new BasicHttpBinding(), endpoint);
+                this.Factory = factory;
+                this.ServerProxy = factory.CreateChannel();
+                this.TcpListener = tcpListener;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void listViewResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -41,12 +54,18 @@ namespace ClientApplication
         }
         private void listViewResults_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            var s = (ListView)sender;
+            foreach (var x in s.ItemsSource)
+            {
+                MessageBox.Show(x.GetType().ToString());
+            }
 
         }
 
 
         private void listView_Downloads_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
 
         }
 
@@ -62,39 +81,71 @@ namespace ClientApplication
 
         private void search_Btn_Click(object sender, RoutedEventArgs e)
         {
-
-
-
+            if (this.file_name_textBox.Text.Trim().Count() > 0)
+            {
+                var search = new FileSearch(this.file_name_textBox.Text, this.ConfigDetails.User);
+                var filesAsString = this.ServerProxy.SearchFile(this.xMLHandler.Serialize<FileSearch>(search));
+                if (filesAsString != null)
+                {
+                    var seeds = this.xMLHandler.Deserialize<List<FileSeed>>(filesAsString);
+                    this.listView_Results.ItemsSource = seeds;
+                }
+            }
         }
 
-        //When logout button is clicked it will delete the info and open log in screen
         private void logOut_Btn_Click(object sender, RoutedEventArgs e)
         {
-            /*
-            if (File.Exists(Main.XML_FILE_NAME))
-            {
-                File.Delete(Main.XML_FILE_NAME);
-            }
-            new Login();
-            Close();
-            */
+            LogOutUser();
+            Login login = new Login();
+            login.Show();
+            System.IO.File.Delete(Login.CONFIGFILE);
+            this.Close();
+
         }
 
-        // this method can be removed
-        private void file_name_textBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void CloseConnections()
         {
-
+            this.TcpListener.Stop();
+            this.Factory.Close();
         }
 
-        //when window is closing update the server that user is out
+        private void LogOutUser()
+        {
+            try
+            {
+                var respond = ServerProxy.SignOut(this.xMLHandler.Serialize<UserDetails>(this.ConfigDetails.User));
+                if (CheckIfErrorFromServer(respond) == false)
+                {
+                    throw new Exception(respond);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                CloseConnections();
+            }
+        }
+
+        private Boolean CheckIfErrorFromServer(string serverRespond)
+        {
+            string answerCode = "";
+            foreach (Char c in serverRespond.Take(3))
+            {
+                answerCode += c;
+            }
+            if (answerCode.Equals(Login.BAD))
+            {
+                return false;
+            }
+            return true;
+        }
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            /*
-            s.Send(Encoding.Default.GetBytes(JsonConvert.SerializeObject(new Details())));
-
-            s.Close();
-            s.Dispose();
-        */
+            LogOutUser();
         }
 
         private void Window_Closed(object sender, EventArgs e)

@@ -27,12 +27,14 @@ namespace ClientApplication
     /// </summary>
     public partial class Login : Window
     {
-        private static readonly string CONFIGFILE = "MyConfig.xml";
-        private static readonly string BAD = "400";
+        public static readonly string CONFIGFILE = "MyConfig.xml";
+        public static readonly string BAD = "400";
         private XMLHandler xMLHandler = new XMLHandler();
         private ConfigDetails ConfigDetails;
         private IDuckTorrentServerApi ServerProxy;
+        private ChannelFactory<IDuckTorrentServerApi> Factory;
         private TcpListener TcpListener;
+        public static Boolean IsBack = false;
 
         public Login()
         {
@@ -51,7 +53,14 @@ namespace ClientApplication
                 System.IO.File.WriteAllText(CONFIGFILE, str);*/
                 CheckXMLConfigValidation();
                 InitDetailsAndConnections();
-                MoveToMainWindows();
+                if (IsBack == false)
+                {
+                    MoveToMainWindows();
+                }
+                else
+                {
+                    IsBack = false;
+                }
             }
             catch (Exception ex)
             {
@@ -76,9 +85,11 @@ namespace ClientApplication
         private void MoveToMainWindows()
         {
             SignInUser();
-            MainWindow mainWindow = new MainWindow(this.ConfigDetails, this.ServerProxy, this.TcpListener);
+            this.Factory.Close();
+            MainWindow mainWindow = new MainWindow(this.ConfigDetails, this.TcpListener);
             mainWindow.Show();
             this.Close();
+            IsBack = true;
         }
 
         private void InitDetailsAndConnections()
@@ -127,6 +138,10 @@ namespace ClientApplication
 
         private void OpenTcpListener()
         {
+            if (this.TcpListener != null && this.TcpListener.Server.IsBound == true)
+            {
+                this.TcpListener.Stop();
+            }
             IPEndPoint endPoint = new IPEndPoint(IPAddress.Loopback, ConfigDetails.Port);
             this.TcpListener = new TcpListener(endPoint);
             this.TcpListener.Start();
@@ -157,8 +172,13 @@ namespace ClientApplication
 
         private void OpenServerSocket()
         {
+            if (this.Factory != null && this.Factory.State == CommunicationState.Opened)
+            {
+                this.Factory.Close();
+            }
             EndpointAddress endpoint = new EndpointAddress(this.ConfigDetails.GenerateServerIPAdress());
             ChannelFactory<IDuckTorrentServerApi> factory = new ChannelFactory<IDuckTorrentServerApi>(new BasicHttpBinding(), endpoint);
+            this.Factory = factory;
             this.ServerProxy = factory.CreateChannel();
         }
 
