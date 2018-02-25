@@ -90,6 +90,10 @@ namespace ClientApplication
                     var seeds = this.xMLHandler.Deserialize<List<FileSeed>>(filesAsString);
                     this.listView_Results.ItemsSource = seeds;
                 }
+                else
+                {
+                    this.listView_Results.ItemsSource = null;
+                }
             }
         }
 

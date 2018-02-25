@@ -11,6 +11,29 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckTorrentClasses", "DuckT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckTorrentClient", "DuckTorrentClient\DuckTorrentClient.csproj", "{B1C4B24F-81FE-4DAC-BB52-8BB9766593ED}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "DuckTorrentWebSite", "DuckTorrentWebSite\", "{5BBFDD60-0C92-49A0-BB2A-C26C530C606C}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.6.1"
+		ProjectReferences = "{7275b6ae-b576-40b4-aaad-f2d7790d5c55}|DuckTorrentDB.dll;{12D0E8DE-F0C1-441E-B098-A26BBB26686C}|DuckTorrentClasses.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_53624"
+		Debug.AspNetCompiler.PhysicalPath = "DuckTorrentWebSite\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_53624\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_53624"
+		Release.AspNetCompiler.PhysicalPath = "DuckTorrentWebSite\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_53624\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "53624"
+		SlnRelativePath = "DuckTorrentWebSite\"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +56,10 @@ Global
 		{B1C4B24F-81FE-4DAC-BB52-8BB9766593ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1C4B24F-81FE-4DAC-BB52-8BB9766593ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1C4B24F-81FE-4DAC-BB52-8BB9766593ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BBFDD60-0C92-49A0-BB2A-C26C530C606C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BBFDD60-0C92-49A0-BB2A-C26C530C606C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BBFDD60-0C92-49A0-BB2A-C26C530C606C}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BBFDD60-0C92-49A0-BB2A-C26C530C606C}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

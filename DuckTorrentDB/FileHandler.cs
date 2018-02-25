@@ -72,8 +72,13 @@ namespace DuckTorrentDB
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
             {
+                var usersON = from user in db.Users
+                              where user.IsOnline == 1 && user.UserName != userName
+                              select user.UserName;
+
+
                 var files = from f in db.Files
-                            where f.FIleName.Contains(fileName) && f.UserName != userName
+                            where f.FIleName.Contains(fileName) && usersON.Contains(f.UserName) == true
                             group f by f.FIleName into GroupFiles
                             select GroupFiles;
 
