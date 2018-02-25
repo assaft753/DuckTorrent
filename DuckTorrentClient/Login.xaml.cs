@@ -34,7 +34,6 @@ namespace ClientApplication
         private IDuckTorrentServerApi ServerProxy;
         private ChannelFactory<IDuckTorrentServerApi> Factory;
         private TcpListener TcpListener;
-        public static Boolean IsBack = false;
 
         public Login()
         {
@@ -53,14 +52,7 @@ namespace ClientApplication
                 System.IO.File.WriteAllText(CONFIGFILE, str);*/
                 CheckXMLConfigValidation();
                 InitDetailsAndConnections();
-                if (IsBack == false)
-                {
-                    MoveToMainWindows();
-                }
-                else
-                {
-                    IsBack = false;
-                }
+                MoveToMainWindows();
             }
             catch (Exception ex)
             {
@@ -85,11 +77,11 @@ namespace ClientApplication
         private void MoveToMainWindows()
         {
             SignInUser();
-            this.Factory.Close();
-            MainWindow mainWindow = new MainWindow(this.ConfigDetails, this.TcpListener);
+            MainWindow mainWindow = new MainWindow(this.ConfigDetails, this.ServerProxy, this.TcpListener);
+            mainWindow.CloseConnectionEvent += this.CloseConnection;
+            PutData();
             mainWindow.Show();
-            this.Close();
-            IsBack = true;
+            this.Hide();
         }
 
         private void InitDetailsAndConnections()
@@ -295,6 +287,13 @@ namespace ClientApplication
             this.ConfigDetails.ServerIP = this.serverip_Textbox.Text;
             this.ConfigDetails.DownloadPath = this.downloadPath_Textbox.Text;
             this.ConfigDetails.UploadPath = this.uploadPath_Textbox.Text;
+        }
+
+        private void CloseConnection()
+        {
+            this.Factory.Close();
+            this.TcpListener.Stop();
+            Show();
         }
     }
 }

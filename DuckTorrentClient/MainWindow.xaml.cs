@@ -23,23 +23,21 @@ namespace ClientApplication
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    public delegate void CloseConnections();
     public partial class MainWindow : Window
     {
         private XMLHandler xMLHandler = new XMLHandler();
         private ConfigDetails ConfigDetails;
-        private ChannelFactory<IDuckTorrentServerApi> Factory;
         private TcpListener TcpListener;
         private IDuckTorrentServerApi ServerProxy;
-        public MainWindow(ConfigDetails configDetails, TcpListener tcpListener)
+        public event CloseConnections CloseConnectionEvent;
+        public MainWindow(ConfigDetails configDetails, IDuckTorrentServerApi serverProxy, TcpListener tcpListener)
         {
             try
             {
                 InitializeComponent();
                 this.ConfigDetails = configDetails;
-                EndpointAddress endpoint = new EndpointAddress(this.ConfigDetails.GenerateServerIPAdress());
-                ChannelFactory<IDuckTorrentServerApi> factory = new ChannelFactory<IDuckTorrentServerApi>(new BasicHttpBinding(), endpoint);
-                this.Factory = factory;
-                this.ServerProxy = factory.CreateChannel();
+                this.ServerProxy = serverProxy;
                 this.TcpListener = tcpListener;
             }
             catch (Exception ex)
@@ -99,20 +97,10 @@ namespace ClientApplication
 
         private void logOut_Btn_Click(object sender, RoutedEventArgs e)
         {
-            LogOutUser();
-            Login login = new Login();
-            login.Show();
             System.IO.File.Delete(Login.CONFIGFILE);
-            this.Close();
+            LogOutUser();
 
         }
-
-        private void CloseConnections()
-        {
-            this.TcpListener.Stop();
-            this.Factory.Close();
-        }
-
         private void LogOutUser()
         {
             try
@@ -129,7 +117,7 @@ namespace ClientApplication
             }
             finally
             {
-                CloseConnections();
+                Close();
             }
         }
 
@@ -149,7 +137,7 @@ namespace ClientApplication
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            LogOutUser();
+            this.CloseConnectionEvent();
         }
 
         private void Window_Closed(object sender, EventArgs e)
