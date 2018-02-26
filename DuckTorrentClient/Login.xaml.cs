@@ -134,7 +134,7 @@ namespace ClientApplication
             {
                 this.TcpListener.Stop();
             }
-            IPEndPoint endPoint = new IPEndPoint(IPAddress.Loopback, ConfigDetails.Port);
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, ConfigDetails.Port);
             this.TcpListener = new TcpListener(endPoint);
             this.TcpListener.Start();
         }
