@@ -17,12 +17,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using System.ServiceModel;
+using DuckTorrentClient;
 
 namespace ClientApplication
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public delegate void CloseConnections();
     public partial class MainWindow : Window
     {
@@ -30,7 +29,19 @@ namespace ClientApplication
         private ConfigDetails ConfigDetails;
         private TcpListener TcpListener;
         private IDuckTorrentServerApi ServerProxy;
+        private Uploader Uploader;
+        private List<UploadDetails> UploadList;
         public event CloseConnections CloseConnectionEvent;
+        public Downloader downloader;
+
+        List<UploadDetails> uploadDetails = new List<UploadDetails>()
+        {
+            new UploadDetails("123","aaa",2,"completed"),
+            new UploadDetails("123","aaa",2,"completed")
+        };
+
+        public List<UploadDetails> UploadDetails { get => uploadDetails; set => uploadDetails = value; }
+
         public MainWindow(ConfigDetails configDetails, IDuckTorrentServerApi serverProxy, TcpListener tcpListener)
         {
             try
@@ -39,6 +50,15 @@ namespace ClientApplication
                 this.ConfigDetails = configDetails;
                 this.ServerProxy = serverProxy;
                 this.TcpListener = tcpListener;
+                this.Uploader = new Uploader(this.TcpListener, this.xMLHandler, this.ConfigDetails);
+
+                //this.UploadList = this.Uploader.UploadDetails;
+                this.Uploader.UpdateList += UpdateUploadList;
+                this.downloader = new Downloader(this.ConfigDetails, this.xMLHandler);
+                this.listView_Uploads.ItemsSource = UploadDetails;
+                //this.uploadDetails.Add(UploadDetails("122", "222", 3, "Ssss"));
+                //Test();
+                //this.Uploader.StartListening();
             }
             catch (Exception ex)
             {
@@ -46,33 +66,23 @@ namespace ClientApplication
             }
         }
 
-        private void listViewResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void UpdateUploadList()
         {
-
+            //this.listView_Uploads.Dispatcher.Invoke(new CloseConnections(this.Test));
         }
+
+        private void Test()
+        {
+            //this.listView_Uploads.Items.Refresh();
+        }
+
         private void listViewResults_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var s = (ListView)sender;
-            foreach (var x in s.ItemsSource)
-            {
-                MessageBox.Show(x.GetType().ToString());
-            }
-
-        }
-
-
-        private void listView_Downloads_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-
+            FileSeed fileSeed = (FileSeed)this.listView_Results.SelectedItem;
+            this.downloader.StartDownloading(fileSeed);
         }
 
         private void listView_Downloads_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void listView_Uploads_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
@@ -101,6 +111,7 @@ namespace ClientApplication
             LogOutUser();
 
         }
+
         private void LogOutUser()
         {
             try
@@ -137,14 +148,13 @@ namespace ClientApplication
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            this.Uploader.StopListening();
             this.CloseConnectionEvent();
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        private void listView_Uploads_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            // do nothing
-
+            MessageBox.Show(sender.ToString());
         }
-
     }
 }
