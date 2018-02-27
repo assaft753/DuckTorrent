@@ -62,6 +62,7 @@
     </Compile>
     <Compile Include="DownloadDetails.cs" />
     <Compile Include="Downloader.cs" />
+    <Compile Include="DownloadTask.cs" />
     <Compile Include="DownloadView.cs" />
     <Compile Include="UploadDetails.cs" />
     <Compile Include="Uploader.cs" />

@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -33,8 +34,9 @@ namespace DuckTorrentClient
         {
             if (this.Downloading.ContainsKey(fileSeed.FileName) == false)
             {
+                var DownloadTasks = new List<DownloadTask>();
                 this.Downloading.Add(fileSeed.FileName, fileSeed);
-                List<Task<Byte[]>> seedsTask = new List<Task<Byte[]>>();
+                //List<Task<Byte[]>> seedsTask = new List<Task<Byte[]>>();
                 int ChunkSize = (int)fileSeed.Size / fileSeed.Seeds.Count;
                 int leftover = (int)fileSeed.Size % fileSeed.Seeds.Count;
 
@@ -46,20 +48,19 @@ namespace DuckTorrentClient
                     TcpClient tcpClient = new TcpClient(fileSeed.Seeds[i].Ip, fileSeed.Seeds[i].Port);
                     tcpClientsList.Add(tcpClient);
                 }
-                int count = 0;
 
 
                 for (int j = 0; j < fileSeed.Seeds.Count; j++)
                 {
                     if (j == fileSeed.Seeds.Count - 1)
                     {
-                        seedsTask.Add(new Task<Byte[]>(() => this.SinglePartDownload(tcpClientsList[j], ChunkSize + leftover, currentPos, fileSeed)));
-                        seedsTask[j].Start();
+                        DownloadTasks.Add(new DownloadTask(tcpClientsList[j], ChunkSize + leftover, currentPos, fileSeed, this.SinglePartDownload));
+                        DownloadTasks[j].DownloadHandler.Start();
                     }
                     else
                     {
-                        seedsTask.Add(new Task<Byte[]>(() => this.SinglePartDownload(tcpClientsList[j], ChunkSize, currentPos, fileSeed)));
-                        seedsTask[j].Start();
+                        DownloadTasks.Add(new DownloadTask(tcpClientsList[j], ChunkSize, currentPos, fileSeed, this.SinglePartDownload));
+                        DownloadTasks[j].DownloadHandler.Start();
                         currentPos += ChunkSize;
                     }
                 }
@@ -70,10 +71,10 @@ namespace DuckTorrentClient
 
                 using (FileStream fileStream = new FileStream(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName, FileMode.OpenOrCreate, FileAccess.Write))
                 {
-                    for (int x = 0; x < seedsTask.Count; x++)
+                    for (int x = 0; x < DownloadTasks.Count; x++)
                     {
-                        seedsTask[x].Wait();
-                        var data = seedsTask[x].Result;
+                        DownloadTasks[x].DownloadHandler.Wait();
+                        var data = DownloadTasks[x].DownloadHandler.Result;
                         BinaryWriter binaryWriter = new BinaryWriter(fileStream);
                         binaryWriter.Write(data, 0, data.Length);
                     }
@@ -90,6 +91,7 @@ namespace DuckTorrentClient
 
         private Byte[] SinglePartDownload(TcpClient tcpClient, int ChunkSize, int initPos, FileSeed fileSeed)
         {
+            MessageBox.Show(tcpClient.Client.LocalEndPoint.ToString());
             using (NetworkStream networkStream = tcpClient.GetStream())
             {
                 using (StreamWriter sw = new StreamWriter(networkStream))

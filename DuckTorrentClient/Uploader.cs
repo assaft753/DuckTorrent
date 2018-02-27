@@ -82,7 +82,7 @@ namespace DuckTorrentClient
                     using (BinaryReader binaryReader = new BinaryReader(fileStream))
                     {
                         binaryReader.BaseStream.Seek((long)requestChunk.Offset, SeekOrigin.Begin);
-                        binaryReader.Read(fileAsChunk, requestChunk.Offset, fileAsChunk.Length);
+                        binaryReader.Read(fileAsChunk, 0, fileAsChunk.Length);
                     }
                 }
 
