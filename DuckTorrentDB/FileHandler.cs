@@ -112,5 +112,11 @@ namespace DuckTorrentDB
                 return result;
             }
         }
+
+        public void RefreshFiles(String ip, int port, String userName, List<DuckTorrentClasses.File> files)
+        {
+            this.RemoveFiles(userName);
+            this.AddFiles(ip, port, userName, files);
+        }
     }
 }

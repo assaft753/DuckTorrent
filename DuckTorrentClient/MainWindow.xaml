@@ -39,7 +39,7 @@
         <Label x:Name="downloads_ListView_label" Content="Downlods" HorizontalAlignment="Left" Margin="20,2.8,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.428,0.425" Width="82" Grid.Row="1" Height="26" Grid.ColumnSpan="2" FontFamily="Showcard Gothic"/>
         <Label x:Name="enter_file_name_label" Content="Enter file name" HorizontalAlignment="Left" Margin="20,51,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="130" Height="26" FontFamily="Showcard Gothic"/>
         <TextBox x:Name="file_name_textBox" HorizontalAlignment="Left" Height="23" Margin="20,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="101" Grid.ColumnSpan="2"/>
-        <ListView x:Name="listView_Uploads" HorizontalAlignment="Left" Height="101" Margin="20,197.4,0,0" VerticalAlignment="Top" Width="688" IsSynchronizedWithCurrentItem="True" MouseDoubleClick="listView_Uploads_MouseDoubleClick" Grid.Row="1" Grid.ColumnSpan="2">
+        <ListView x:Name="listView_Uploads" HorizontalAlignment="Left" Height="101" Margin="20,197.4,0,0" VerticalAlignment="Top" Width="688"  Grid.Row="1" Grid.ColumnSpan="2">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="File Name" Width="220" DisplayMemberBinding="{Binding FileName}" />
@@ -50,7 +50,7 @@
             </ListView.View>
         </ListView>
         <Label x:Name="compName_label" Content="DuckTorrent" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.428,0.425" Width="101" Height="26" Grid.ColumnSpan="2" FontFamily="Showcard Gothic"/>
-        <ListView x:Name="listView_Downloads" HorizontalAlignment="Left" Height="126" Margin="20,28.8,0,0" VerticalAlignment="Top" IsSynchronizedWithCurrentItem="True" Width="686" MouseDoubleClick="listView_Downloads_MouseDoubleClick" Grid.Row="1" Grid.ColumnSpan="2">
+        <ListView x:Name="listView_Downloads" HorizontalAlignment="Left" Height="126" Margin="20,28.8,0,0" VerticalAlignment="Top" IsSynchronizedWithCurrentItem="True" Width="686" Grid.Row="1" Grid.ColumnSpan="2">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="File Name" Width="220" DisplayMemberBinding="{Binding FileName}" />

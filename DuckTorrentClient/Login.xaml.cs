@@ -40,16 +40,6 @@ namespace ClientApplication
             InitializeComponent();
             try
             {
-                /*var con = new ConfigDetails()
-                {
-                    User = new UserDetails("assaf", "1234"),
-                    ServerIP = "127.0.0.1",
-                    Port = 8005,
-                    DownloadPath = @"C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug",
-                    UploadPath = @"C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug"
-                };
-                var str = xMLHandler.Serialize<ConfigDetails>(con);
-                System.IO.File.WriteAllText(CONFIGFILE, str);*/
                 CheckXMLConfigValidation();
                 InitDetailsAndConnections();
                 MoveToMainWindows();
@@ -59,19 +49,6 @@ namespace ClientApplication
                 System.Windows.MessageBox.Show(ex.Message);
                 PutData();
             }
-            /*XMLHandler xMLHandler = new XMLHandler();
-            var con = new ConfigDetails()
-            {
-                User = new UserDetails("assaf", "1234"),
-                ServerIP = "localhost",
-                Port = 8090
-            };
-            EndpointAddress ep = new EndpointAddress(con.GenerateServerIPAdress());
-            ChannelFactory<IDuckTorrentServerApi> factory = new ChannelFactory<IDuckTorrentServerApi>(new BasicHttpBinding(), ep);
-            IDuckTorrentServerApi proxy = factory.CreateChannel();
-            string answer = proxy.SearchFile(xMLHandler.Serialize<FileSearch>(new FileSearch("u", con.User)));
-            MessageBox.Show(answer);*/
-
         }
 
         private void MoveToMainWindows()

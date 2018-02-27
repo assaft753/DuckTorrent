@@ -34,6 +34,32 @@ namespace DuckTorrentService
             }
         }
 
+        public string RefreshFiles(string userByXML)
+        {
+            string toPrint = "";
+            try
+            {
+
+                XMLHandler xMLHandler = new XMLHandler();
+                var user = xMLHandler.Deserialize<DuckTorrentClasses.User>(userByXML);
+                toPrint += "User Name: " + user.UserInfo.UserName + " Trying To Refresh Files.... ";
+                ClientHandler clientHandler = new ClientHandler();
+                FileHandler fileHandler = new FileHandler();
+                clientHandler.CheckUser(user.UserInfo.UserName, user.UserInfo.Password);
+                fileHandler.RefreshFiles(user.Ip, user.Port, user.UserInfo.UserName, user.Files);
+                toPrint += "File's User Refreshed Succefully ";
+                Console.WriteLine(toPrint);
+                return "200";
+            }
+            catch (Exception ex)
+            {
+                toPrint += " 400" + " " + ex.Message;
+                Console.WriteLine(toPrint);
+                return " 400" + " " + ex.Message;
+            }
+
+        }
+
         public string SearchFile(string fileByXML)
         {
             string toPrint = "";
@@ -115,7 +141,6 @@ namespace DuckTorrentService
                 Console.WriteLine(toPrint);
                 return " 400" + " " + ex.Message;
             }
-
         }
     }
 }

@@ -18,32 +18,36 @@ using System.Windows.Shapes;
 using System.IO;
 using System.ServiceModel;
 using DuckTorrentClient;
+using System.Net;
 
 namespace ClientApplication
 {
 
-    public delegate void CloseConnections();
+    public delegate void RefreshDownloadList();
     public delegate void StartDownloading(String FileName, String Size, String Sources);
-    public delegate void FinishDownload(String Speed, String TimePassed, String fileName);
+    public delegate void FinishDownloading(String Speed, String TimePassed, String fileName);
+    public delegate void ErrorDownloading(String fileName);
+
+    public delegate void RefreshUploadList();
+    public delegate void StartUploading(String fileName, String size, String iP, int id);
+    public delegate void FinishUploading(int id);
+    public delegate void ErrorUploading(int id);
+
+    public delegate void CloseConnection();
+
+
     public partial class MainWindow : Window
     {
         private XMLHandler xMLHandler = new XMLHandler();
         private ConfigDetails ConfigDetails;
         private TcpListener TcpListener;
         private IDuckTorrentServerApi ServerProxy;
-        private Uploader Uploader;
-        private List<UploadDetails> UploadList;
+        private List<UploadView> uploadView;
         private List<DownloadView> downloadView;
-        public event CloseConnections CloseConnectionEvent;
         public Downloader downloader;
-
-        List<UploadDetails> uploadDetails = new List<UploadDetails>()
-        {
-            new UploadDetails("123","aaa",2,"completed"),
-            new UploadDetails("123","aaa",2,"completed")
-        };
-
-        public List<UploadDetails> UploadDetails { get => uploadDetails; set => uploadDetails = value; }
+        private Uploader Uploader;
+        public event RefreshDownloadList DownloadListViewRefresh;
+        public event CloseConnection CloseConnectionEvent;
 
         public MainWindow(ConfigDetails configDetails, IDuckTorrentServerApi serverProxy, TcpListener tcpListener)
         {
@@ -57,13 +61,18 @@ namespace ClientApplication
                 this.Uploader = new Uploader(this.TcpListener, this.xMLHandler, this.ConfigDetails);
                 this.downloader = new Downloader(this.ConfigDetails, this.xMLHandler);
 
-                this.Uploader.UpdateList += UpdateUploadList;
                 this.downloader.DownloadStarted += StartDownloading;
                 this.downloader.DownloadFinished += FinishDownlading;
+                this.downloader.DownloadError += ErrorDownloading;
+
+                this.Uploader.UploadStarted += StartUploading;
+                this.Uploader.UploadFinished += FinishUploading;
+                this.Uploader.UploadError += ErrorUploading;
 
                 this.downloadView = new List<DownloadView>();
+                this.uploadView = new List<UploadView>();
                 this.listView_Downloads.ItemsSource = this.downloadView;
-                this.listView_Uploads.ItemsSource = UploadDetails;//
+                this.listView_Uploads.ItemsSource = uploadView;
                 this.Uploader.StartListening();
             }
             catch (Exception ex)
@@ -71,6 +80,49 @@ namespace ClientApplication
                 MessageBox.Show(ex.Message);
             }
         }
+
+
+        private void ErrorUploading(int id)
+        {
+            foreach (var upload in uploadView)
+            {
+                if (upload.Id == id && upload.Status.Equals("Uploading") == true)
+                {
+                    upload.Status = "Error";
+                    break;
+                }
+            }
+            this.listView_Uploads.Dispatcher.Invoke(new RefreshUploadList(this.RefreshUploadListView));
+        }
+
+        private void StartUploading(String fileName, String size, String iP, int id)
+        {
+            this.uploadView.Add(new UploadView()
+            {
+                FileName = fileName,
+                Status = "Uploading",
+                ChunkSize = size + " Bytes",
+                IP = iP,
+                Id = id
+            });
+            this.listView_Uploads.Dispatcher.Invoke(new RefreshUploadList(this.RefreshUploadListView));
+
+        }
+
+        private void FinishUploading(int id)
+        {
+            foreach (var upload in uploadView)
+            {
+                if (upload.Id == id && upload.Status.Equals("Uploading") == true)
+                {
+                    upload.Status = "Completed";
+                    break;
+                }
+            }
+            this.listView_Uploads.Dispatcher.Invoke(new RefreshUploadList(this.RefreshUploadListView));
+        }
+
+
 
         private void FinishDownlading(string Speed, string TimePassed, String fileName)
         {
@@ -82,30 +134,76 @@ namespace ClientApplication
                     download.Speed = Speed + " KBps";
                     download.TimePassed = TimePassed + " Seconds";
                 }
-                this.listView_Downloads.Dispatcher.Invoke(new CloseConnections(this.Test));
+                this.listView_Downloads.Dispatcher.Invoke(new RefreshDownloadList(this.RefreshDownloadListView));
+                RefreshFiles();
             }
         }
 
-        private void UpdateUploadList()
+        private void ErrorDownloading(String fileName)
         {
-            //this.listView_Uploads.Dispatcher.Invoke(new CloseConnections(this.Test));
+            foreach (var download in downloadView)
+            {
+                if (download.FileName.Equals(fileName) == true && download.Status.Equals("Downloading") == true)
+                {
+                    download.Status = "Error";
+                }
+                this.listView_Downloads.Dispatcher.Invoke(new RefreshDownloadList(this.RefreshDownloadListView));
+            }
         }
 
-        private void Test()
+        private void RefreshFiles()
+        {
+            string ip = GetIP();
+            var files = GetFiles();
+            User user = new User(this.ConfigDetails.User, files, this.ConfigDetails.Port, ip);
+            var serverRespond = ServerProxy.RefreshFiles(this.xMLHandler.Serialize<User>(user));
+            if (CheckIfErrorFromServer(serverRespond) == false)
+            {
+                throw new Exception(serverRespond);
+            }
+        }
+
+        private string GetIP()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            return "";
+        }
+
+        private List<DuckTorrentClasses.File> GetFiles()
+        {
+            var paths = Directory.GetFiles(this.ConfigDetails.UploadPath);
+            List<DuckTorrentClasses.File> files = new List<DuckTorrentClasses.File>();
+            foreach (var path in paths)
+            {
+                DuckTorrentClasses.File file = new DuckTorrentClasses.File();
+                file.FileSize = new System.IO.FileInfo(path).Length;
+                file.FileName = new System.IO.FileInfo(path).Name;
+                files.Add(file);
+            }
+            return files;
+        }
+
+        private void RefreshDownloadListView()
         {
             this.listView_Downloads.Items.Refresh();
-            //this.listView_Uploads.Items.Refresh();
+        }
+
+        private void RefreshUploadListView()
+        {
+            this.listView_Uploads.Items.Refresh();
         }
 
         private void listViewResults_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             FileSeed fileSeed = (FileSeed)this.listView_Results.SelectedItem;
             Task.Factory.StartNew(() => this.downloader.StartDownloading(fileSeed));
-        }
-
-        private void listView_Downloads_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
         }
 
         private void search_Btn_Click(object sender, RoutedEventArgs e)
@@ -182,12 +280,7 @@ namespace ClientApplication
                 Size = size + " Bytes",
                 Sources = sources + " Seeds"
             });
-            this.listView_Downloads.Dispatcher.Invoke(new CloseConnections(this.Test));
-        }
-
-        private void listView_Uploads_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            MessageBox.Show(sender.ToString());
+            this.listView_Downloads.Dispatcher.Invoke(new RefreshDownloadList(this.RefreshDownloadListView));
         }
     }
 }

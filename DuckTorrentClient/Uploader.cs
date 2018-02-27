@@ -1,4 +1,5 @@
-﻿using DuckTorrentClasses;
+﻿using ClientApplication;
+using DuckTorrentClasses;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,12 +20,13 @@ namespace DuckTorrentClient
         private XMLHandler XMLHandler;
         private Boolean StopListeningFlag;
         private ConfigDetails ConfigDetails;
-        private Task Listener;
         private List<Task> Tasks;
-        //public List<UploadDetails> UploadDetails;
         private Thread thread;
+        private int uploaderId;
 
-        public event UpdateUploads UpdateList;
+        public event StartUploading UploadStarted;
+        public event FinishUploading UploadFinished;
+        public event ErrorUploading UploadError;
 
         public Uploader(TcpListener tcpListener, XMLHandler xMLHandler, ConfigDetails configDetails)
         {
@@ -32,17 +34,12 @@ namespace DuckTorrentClient
             XMLHandler = xMLHandler;
             StopListeningFlag = false;
             ConfigDetails = configDetails;
-            /*UploadDetails = new List<UploadDetails>()
-            {
-                new DuckTorrentClient.UploadDetails("123", "aaa", 2, "completed"),
-            new DuckTorrentClient.UploadDetails("123", "aaa", 2, "completed")
-            };*/
             Tasks = new List<Task>();
+            uploaderId = 0;
         }
 
         public void StartListening()
         {
-            //UpdateList();
             this.thread = new Thread(new ThreadStart(() =>
              {
 
@@ -63,33 +60,39 @@ namespace DuckTorrentClient
 
         private void UploadHandler(TcpClient tcpClient)
         {
-            var ip = tcpClient.Client.RemoteEndPoint.ToString();
-            using (var networkStream = tcpClient.GetStream())
+            int id = uploaderId;
+            uploaderId++;
+            try
             {
-                StreamReader streamReader = new StreamReader(networkStream);
-
-                var requestStr = streamReader.ReadLine();
-
-                var requestChunk = XMLHandler.Deserialize<ChunkRequest>(requestStr);
-                var uploadDetails = new UploadDetails(ip, requestChunk.FileName, requestChunk.ChunkSize, "Uploading");
-                //this.UploadDetails.Add(uploadDetails);
-                this.UpdateList();
-
-                Byte[] fileAsChunk = new Byte[requestChunk.ChunkSize];
-
-                using (FileStream fileStream = new FileStream(this.ConfigDetails.UploadPath + "\\" + requestChunk.FileName, FileMode.Open, FileAccess.Read))
+                var ip = tcpClient.Client.RemoteEndPoint.ToString();
+                using (var networkStream = tcpClient.GetStream())
                 {
-                    using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                    {
-                        binaryReader.BaseStream.Seek((long)requestChunk.Offset, SeekOrigin.Begin);
-                        binaryReader.Read(fileAsChunk, 0, fileAsChunk.Length);
-                    }
-                }
+                    StreamReader streamReader = new StreamReader(networkStream);
 
-                networkStream.Write(fileAsChunk, 0, fileAsChunk.Length);
-                networkStream.Flush();
-                uploadDetails.Status = "Completed";
-                this.UpdateList();
+                    var requestStr = streamReader.ReadLine();
+
+                    var requestChunk = XMLHandler.Deserialize<ChunkRequest>(requestStr);
+                    this.UploadStarted(requestChunk.FileName, requestChunk.ChunkSize.ToString(), ip, id);
+
+                    Byte[] fileAsChunk = new Byte[requestChunk.ChunkSize];
+
+                    using (FileStream fileStream = new FileStream(this.ConfigDetails.UploadPath + "\\" + requestChunk.FileName, FileMode.Open, FileAccess.Read))
+                    {
+                        using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                        {
+                            binaryReader.BaseStream.Seek((long)requestChunk.Offset, SeekOrigin.Begin);
+                            binaryReader.Read(fileAsChunk, 0, fileAsChunk.Length);
+                        }
+                    }
+
+                    networkStream.Write(fileAsChunk, 0, fileAsChunk.Length);
+                    networkStream.Flush();
+                    this.UploadFinished(id);
+                }
+            }
+            catch
+            {
+                this.UploadError(id);
             }
         }
     }
