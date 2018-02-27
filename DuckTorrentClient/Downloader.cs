@@ -75,12 +75,17 @@ namespace DuckTorrentClient
                     Stopwatch stopWatch = new Stopwatch();
                     stopWatch.Start();
 
+                    if (System.IO.File.Exists(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName))
+                    {
+                        System.IO.File.Delete(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName);
+                    }
+
                     using (FileStream fileStream = new FileStream(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName, FileMode.Create, FileAccess.Write))
                     {
                         BinaryWriter binaryWriter = new BinaryWriter(fileStream);
                         for (int x = 0; x < DownloadTasks.Count; x++)
                         {
-                            DownloadTasks[x].DownloadHandler.Wait();
+                            Task.WaitAll(DownloadTasks[x].DownloadHandler);
                             var data = DownloadTasks[x].DownloadHandler.Result;
                             if (data == null)
                             {
@@ -121,8 +126,11 @@ namespace DuckTorrentClient
 
                         sw.WriteLine(xmlStringRepair);
                         sw.Flush();
-                        var data = new byte[ChunkSize];
-                        networkStream.Read(data, 0, data.Length);
+                        //var data = new byte[ChunkSize];
+                        //networkStream.Read(data, 0, data.Length);
+                        BinaryReader reader = new BinaryReader(networkStream);
+                        var strdata = reader.ReadString();
+                        var data = Convert.FromBase64String(strdata);
                         return data;
                     }
                 }
