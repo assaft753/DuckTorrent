@@ -46,7 +46,7 @@ namespace ClientApplication
         private List<DownloadView> downloadView;
         public Downloader downloader;
         private Uploader Uploader;
-        public event RefreshDownloadList DownloadListViewRefresh;
+        //public event RefreshDownloadList DownloadListViewRefresh;
         public event CloseConnection CloseConnectionEvent;
 
         public MainWindow(ConfigDetails configDetails, IDuckTorrentServerApi serverProxy, TcpListener tcpListener)
@@ -268,6 +268,7 @@ namespace ClientApplication
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             this.Uploader.StopListening();
+            this.downloader.StopDownloading();
             this.CloseConnectionEvent();
         }
 

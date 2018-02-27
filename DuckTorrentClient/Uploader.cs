@@ -18,11 +18,11 @@ namespace DuckTorrentClient
     {
         private TcpListener TcpListener;
         private XMLHandler XMLHandler;
-        private Boolean StopListeningFlag;
         private ConfigDetails ConfigDetails;
         private List<Task> Tasks;
         private Thread thread;
         private int uploaderId;
+        private Dictionary<int, TcpClient> ActivateUploads;
 
         public event StartUploading UploadStarted;
         public event FinishUploading UploadFinished;
@@ -32,10 +32,10 @@ namespace DuckTorrentClient
         {
             TcpListener = tcpListener;
             XMLHandler = xMLHandler;
-            StopListeningFlag = false;
             ConfigDetails = configDetails;
             Tasks = new List<Task>();
             uploaderId = 0;
+            ActivateUploads = new Dictionary<int, TcpClient>();
         }
 
         public void StartListening()
@@ -43,7 +43,7 @@ namespace DuckTorrentClient
             this.thread = new Thread(new ThreadStart(() =>
              {
 
-                 while (StopListeningFlag == false)
+                 while (1 == 1)
                  {
                      var tcpClient = this.TcpListener.AcceptTcpClient();
                      Task.Factory.StartNew(() => UploadHandler(tcpClient));
@@ -55,6 +55,10 @@ namespace DuckTorrentClient
 
         public void StopListening()
         {
+            foreach (var keyval in this.ActivateUploads)
+            {
+                keyval.Value.Client.Close();
+            }
             this.thread.Suspend();
         }
 
@@ -64,6 +68,9 @@ namespace DuckTorrentClient
             uploaderId++;
             try
             {
+                ActivateUploads.Add(id, tcpClient);
+                tcpClient.ReceiveTimeout = 5000;
+                tcpClient.SendTimeout = 5000;
                 var ip = tcpClient.Client.RemoteEndPoint.ToString();
                 var networkStream = tcpClient.GetStream();
 
@@ -77,7 +84,7 @@ namespace DuckTorrentClient
                 //Byte[] fileAsChunk = new Byte[requestChunk.ChunkSize];
                 List<Byte> fileas = new List<byte>();
                 var bytes = System.IO.File.ReadAllBytes(this.ConfigDetails.UploadPath + "\\" + requestChunk.FileName);
-                for (int j = requestChunk.Offset; j < requestChunk.ChunkSize; j++)
+                for (int j = requestChunk.Offset; j < requestChunk.ChunkSize + requestChunk.Offset; j++)
                 {
                     fileas.Add(bytes[j]);
                 }
@@ -105,8 +112,11 @@ namespace DuckTorrentClient
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
                 this.UploadError(id);
+            }
+            finally
+            {
+                this.ActivateUploads.Remove(id);
             }
         }
     }

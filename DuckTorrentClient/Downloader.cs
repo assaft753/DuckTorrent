@@ -16,6 +16,7 @@ namespace DuckTorrentClient
     public class Downloader
     {
         Dictionary<String, FileSeed> Downloading;
+        Dictionary<String, List<TcpClient>> DownloadingClients;
         ConfigDetails ConfigDetails;
         XMLHandler xMLHandler;
         public event StartDownloading DownloadStarted;
@@ -29,6 +30,7 @@ namespace DuckTorrentClient
             ConfigDetails = configDetails;
             this.xMLHandler = xMLHandler;
             Downloading = new Dictionary<string, FileSeed>();
+            DownloadingClients = new Dictionary<string, List<TcpClient>>();
         }
 
         public void StartDownloading(FileSeed fileSeed)
@@ -45,16 +47,15 @@ namespace DuckTorrentClient
 
                     List<TcpClient> tcpClientsList = new List<TcpClient>();
                     int currentPos = 0;
-
                     for (int i = 0; i < fileSeed.Seeds.Count; i++)
                     {
 
                         TcpClient tcpClient = new TcpClient(fileSeed.Seeds[i].Ip, fileSeed.Seeds[i].Port);
-                        //tcpClient.ReceiveTimeout = 1000;
-                        //tcpClient.SendTimeout = 1000;
+                        tcpClient.ReceiveTimeout = 5000;
+                        tcpClient.SendTimeout = 5000;
                         tcpClientsList.Add(tcpClient);
                     }
-
+                    DownloadingClients.Add(fileSeed.FileName, tcpClientsList);
 
                     for (int j = 0; j < fileSeed.Seeds.Count; j++)
                     {
@@ -103,8 +104,9 @@ namespace DuckTorrentClient
                     this.DownloadFinished(speed.ToString(), time.ToString(), fileSeed.FileName);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                StopDownloading();
                 this.DownloadError(fileSeed.FileName);
                 this.Downloading.Remove(fileSeed.FileName);
             }
@@ -126,8 +128,6 @@ namespace DuckTorrentClient
 
                         sw.WriteLine(xmlStringRepair);
                         sw.Flush();
-                        //var data = new byte[ChunkSize];
-                        //networkStream.Read(data, 0, data.Length);
                         BinaryReader reader = new BinaryReader(networkStream);
                         var strdata = reader.ReadString();
                         var data = Convert.FromBase64String(strdata);
@@ -139,6 +139,17 @@ namespace DuckTorrentClient
             {
                 return null;
             }
+        }
+        public void StopDownloading()
+        {
+            foreach (var keyval in this.DownloadingClients)
+            {
+                foreach (var val in keyval.Value)
+                {
+                    val.Client.Close();
+                }
+            }
+
         }
     }
 }
