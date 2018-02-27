@@ -226,7 +226,7 @@ namespace ClientApplication
 
         private void logOut_Btn_Click(object sender, RoutedEventArgs e)
         {
-            System.IO.File.Delete(Login.CONFIGFILE);
+            //System.IO.File.Delete(Login.CONFIGFILE);
             LogOutUser();
 
         }

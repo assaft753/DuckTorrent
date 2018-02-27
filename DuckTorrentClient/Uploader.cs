@@ -76,22 +76,30 @@ namespace DuckTorrentClient
 
                     Byte[] fileAsChunk = new Byte[requestChunk.ChunkSize];
 
-                    using (FileStream fileStream = new FileStream(this.ConfigDetails.UploadPath + "\\" + requestChunk.FileName, FileMode.Open, FileAccess.Read))
+                    using (BinaryReader reader = new BinaryReader(new FileStream(this.ConfigDetails.UploadPath + "\\" + requestChunk.FileName, FileMode.Open)))
                     {
-                        using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                        {
-                            binaryReader.BaseStream.Seek((long)requestChunk.Offset, SeekOrigin.Begin);
-                            binaryReader.Read(fileAsChunk, 0, fileAsChunk.Length);
-                        }
+                        reader.BaseStream.Seek((long)requestChunk.Offset, SeekOrigin.Begin);
+                        reader.Read(fileAsChunk, 0, fileAsChunk.Length);
                     }
-
                     networkStream.Write(fileAsChunk, 0, fileAsChunk.Length);
-                    networkStream.Flush();
+
+                    /* using (FileStream fileStream = new FileStream(this.ConfigDetails.UploadPath + "\\" + requestChunk.FileName, FileMode.Open, FileAccess.Read))
+                     {
+                         using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                         {
+                             binaryReader.BaseStream.Seek((long)requestChunk.Offset, SeekOrigin.Begin);
+                             binaryReader.Read(fileAsChunk, 0, fileAsChunk.Length);
+                         }
+                     }
+
+                     networkStream.Write(fileAsChunk, 0, fileAsChunk.Length);
+                     networkStream.Flush();*/
                     this.UploadFinished(id);
                 }
             }
             catch
             {
+                MessageBox.Show("error");
                 this.UploadError(id);
             }
         }
