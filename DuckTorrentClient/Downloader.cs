@@ -44,7 +44,6 @@ namespace DuckTorrentClient
                     this.Downloading.Add(fileSeed.FileName, fileSeed);
                     int ChunkSize = (int)fileSeed.Size / fileSeed.Seeds.Count;
                     int leftover = (int)fileSeed.Size % fileSeed.Seeds.Count;
-
                     List<TcpClient> tcpClientsList = new List<TcpClient>();
                     int currentPos = 0;
                     for (int i = 0; i < fileSeed.Seeds.Count; i++)
@@ -56,6 +55,7 @@ namespace DuckTorrentClient
                         tcpClientsList.Add(tcpClient);
                     }
                     DownloadingClients.Add(fileSeed.FileName, tcpClientsList);
+
 
                     for (int j = 0; j < fileSeed.Seeds.Count; j++)
                     {
@@ -99,16 +99,29 @@ namespace DuckTorrentClient
                     stopWatch.Stop();
                     var time = (float)stopWatch.ElapsedMilliseconds / 1000;
                     var speed = ((float)fileSeed.Size / 1000) / time;
-                    this.Downloading.Remove(fileSeed.FileName);
                     System.IO.File.Copy(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName, this.ConfigDetails.UploadPath + "\\" + fileSeed.FileName, true);
                     this.DownloadFinished(speed.ToString(), time.ToString(), fileSeed.FileName);
+                    if (DownloadingClients.ContainsKey(fileSeed.FileName) == true)
+                    {
+                        foreach (var client in DownloadingClients[fileSeed.FileName])
+                        {
+                            client.Close();
+                        }
+                        DownloadingClients.Remove(fileSeed.FileName);
+                    }
+
+                    this.Downloading.Remove(fileSeed.FileName);
                 }
             }
             catch (Exception ex)
             {
                 StopDownloading();
-                this.DownloadError(fileSeed.FileName);
                 this.Downloading.Remove(fileSeed.FileName);
+                if (DownloadingClients.ContainsKey(fileSeed.FileName) == true)
+                {
+                    DownloadingClients.Remove(fileSeed.FileName);
+                }
+                this.DownloadError(fileSeed.FileName);
             }
         }
 
