@@ -1,6 +1,8 @@
-﻿using DuckTorrentClasses;
+﻿using ClientApplication;
+using DuckTorrentClasses;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -15,6 +17,10 @@ namespace DuckTorrentClient
         Dictionary<String, FileSeed> Downloading;
         ConfigDetails ConfigDetails;
         XMLHandler xMLHandler;
+        public event StartDownloading DownloadStarted;
+        public event FinishDownload DownloadFinished;
+
+
 
         public Downloader(ConfigDetails configDetails, XMLHandler xMLHandler)
         {
@@ -40,42 +46,44 @@ namespace DuckTorrentClient
                     TcpClient tcpClient = new TcpClient(fileSeed.Seeds[i].Ip, fileSeed.Seeds[i].Port);
                     tcpClientsList.Add(tcpClient);
                 }
+                int count = 0;
 
-                for (int i = 0; i < fileSeed.Seeds.Count; i++)
+
+                for (int j = 0; j < fileSeed.Seeds.Count; j++)
                 {
-                    if (i == fileSeed.Seeds.Count - 1)
+                    if (j == fileSeed.Seeds.Count - 1)
                     {
-                        seedsTask.Add(new Task<Byte[]>(() => this.SinglePartDownload(tcpClientsList[i], ChunkSize, currentPos + leftover, fileSeed)));
-                        seedsTask[i].Start();
-                        MessageBox.Show(seedsTask[i].Status.ToString());
+                        seedsTask.Add(new Task<Byte[]>(() => this.SinglePartDownload(tcpClientsList[j], ChunkSize + leftover, currentPos, fileSeed)));
+                        seedsTask[j].Start();
                     }
                     else
                     {
-                        seedsTask.Add(new Task<Byte[]>(() => this.SinglePartDownload(tcpClientsList[i], ChunkSize, currentPos, fileSeed)));
-                        seedsTask[i].Start();
-                        MessageBox.Show(seedsTask[i].Status.ToString());
+                        seedsTask.Add(new Task<Byte[]>(() => this.SinglePartDownload(tcpClientsList[j], ChunkSize, currentPos, fileSeed)));
+                        seedsTask[j].Start();
                         currentPos += ChunkSize;
                     }
                 }
-                //update main for start
-                /*foreach (var task in seedsTask)
+
+                this.DownloadStarted(fileSeed.FileName, fileSeed.Size.ToString(), fileSeed.Seeds.Count.ToString());
+                Stopwatch stopWatch = new Stopwatch();
+                stopWatch.Start();
+
+                using (FileStream fileStream = new FileStream(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName, FileMode.OpenOrCreate, FileAccess.Write))
                 {
-                    task.Start();
-                }*/
-                using (FileStream fileStream = new FileStream(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName, FileMode.Create, FileAccess.Write))
-                {
-                    for (int i = 0; i < seedsTask.Count; i++)
+                    for (int x = 0; x < seedsTask.Count; x++)
                     {
-                        seedsTask[i].Wait();
-                        var data = seedsTask[i].Result;
-                        using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
-                        {
-                            binaryWriter.Write(data, 0, data.Length);
-                        }
+                        seedsTask[x].Wait();
+                        var data = seedsTask[x].Result;
+                        BinaryWriter binaryWriter = new BinaryWriter(fileStream);
+                        binaryWriter.Write(data, 0, data.Length);
                     }
                 }
+                stopWatch.Stop();
+                var time = (float)stopWatch.ElapsedMilliseconds / 1000;
+                var speed = ((float)fileSeed.Size / 1000) / time;
                 this.Downloading.Remove(fileSeed.FileName);
                 System.IO.File.Copy(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName, this.ConfigDetails.UploadPath + "\\" + fileSeed.FileName, true);
+                this.DownloadFinished(speed.ToString(), time.ToString(), fileSeed.FileName);
                 //update main for finish
             }
         }

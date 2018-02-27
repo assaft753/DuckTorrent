@@ -23,6 +23,8 @@ namespace ClientApplication
 {
 
     public delegate void CloseConnections();
+    public delegate void StartDownloading(String FileName, String Size, String Sources);
+    public delegate void FinishDownload(String Speed, String TimePassed, String fileName);
     public partial class MainWindow : Window
     {
         private XMLHandler xMLHandler = new XMLHandler();
@@ -31,6 +33,7 @@ namespace ClientApplication
         private IDuckTorrentServerApi ServerProxy;
         private Uploader Uploader;
         private List<UploadDetails> UploadList;
+        private List<DownloadView> downloadView;
         public event CloseConnections CloseConnectionEvent;
         public Downloader downloader;
 
@@ -50,20 +53,36 @@ namespace ClientApplication
                 this.ConfigDetails = configDetails;
                 this.ServerProxy = serverProxy;
                 this.TcpListener = tcpListener;
-                this.Uploader = new Uploader(this.TcpListener, this.xMLHandler, this.ConfigDetails);
 
-                //this.UploadList = this.Uploader.UploadDetails;
-                this.Uploader.UpdateList += UpdateUploadList;
+                this.Uploader = new Uploader(this.TcpListener, this.xMLHandler, this.ConfigDetails);
                 this.downloader = new Downloader(this.ConfigDetails, this.xMLHandler);
-                this.listView_Uploads.ItemsSource = UploadDetails;
-                //this.uploadDetails.Add(UploadDetails("122", "222", 3, "Ssss"));
-                //Test();
-                this.listView_Uploads.Items.Refresh();
+
+                this.Uploader.UpdateList += UpdateUploadList;
+                this.downloader.DownloadStarted += StartDownloading;
+                this.downloader.DownloadFinished += FinishDownlading;
+
+                this.downloadView = new List<DownloadView>();
+                this.listView_Downloads.ItemsSource = this.downloadView;
+                this.listView_Uploads.ItemsSource = UploadDetails;//
                 this.Uploader.StartListening();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void FinishDownlading(string Speed, string TimePassed, String fileName)
+        {
+            foreach (var download in downloadView)
+            {
+                if (download.FileName.Equals(fileName) == true && download.Status.Equals("Downloading") == true)
+                {
+                    download.Status = "Completed";
+                    download.Speed = Speed + " KBps";
+                    download.TimePassed = TimePassed + " Seconds";
+                }
+                this.listView_Downloads.Dispatcher.Invoke(new CloseConnections(this.Test));
             }
         }
 
@@ -74,13 +93,14 @@ namespace ClientApplication
 
         private void Test()
         {
+            this.listView_Downloads.Items.Refresh();
             //this.listView_Uploads.Items.Refresh();
         }
 
         private void listViewResults_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             FileSeed fileSeed = (FileSeed)this.listView_Results.SelectedItem;
-            this.downloader.StartDownloading(fileSeed);
+            Task.Factory.StartNew(() => this.downloader.StartDownloading(fileSeed));
         }
 
         private void listView_Downloads_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -151,6 +171,18 @@ namespace ClientApplication
         {
             this.Uploader.StopListening();
             this.CloseConnectionEvent();
+        }
+
+        private void StartDownloading(String fileName, String size, String sources)
+        {
+            this.downloadView.Add(new DownloadView()
+            {
+                FileName = fileName,
+                Status = "Downloading",
+                Size = size + " Bytes",
+                Sources = sources + " Seeds"
+            });
+            this.listView_Downloads.Dispatcher.Invoke(new CloseConnections(this.Test));
         }
 
         private void listView_Uploads_MouseDoubleClick(object sender, MouseButtonEventArgs e)

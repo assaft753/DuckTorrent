@@ -69,7 +69,6 @@ namespace DuckTorrentClient
                 StreamReader streamReader = new StreamReader(networkStream);
 
                 var requestStr = streamReader.ReadLine();
-                MessageBox.Show(ip + " " + requestStr);
 
                 var requestChunk = XMLHandler.Deserialize<ChunkRequest>(requestStr);
                 var uploadDetails = new UploadDetails(ip, requestChunk.FileName, requestChunk.ChunkSize, "Uploading");
