@@ -58,6 +58,7 @@ namespace ClientApplication
                 this.listView_Uploads.ItemsSource = UploadDetails;
                 //this.uploadDetails.Add(UploadDetails("122", "222", 3, "Ssss"));
                 //Test();
+                this.listView_Uploads.Items.Refresh();
                 this.Uploader.StartListening();
             }
             catch (Exception ex)

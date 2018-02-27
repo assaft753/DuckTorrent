@@ -8,10 +8,10 @@ namespace DuckTorrentClient
 {
     public class UploadDetails
     {
-        public String IP;
-        public String FileName;
-        public int ChunkSize;
-        public String Status;
+        public String IP { get; set; }
+        public String FileName { get; set; }
+        public int ChunkSize { get; set; }
+        public String Status { get; set; }
 
         public UploadDetails(string iP, string fileName, int chunkSize, string status)
         {

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-16"?>
 <ConfigDetails xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <User>
-    <UserName>asi</UserName>
-    <Password>6</Password>
+    <UserName>a</UserName>
+    <Password>1</Password>
   </User>
-  <Port>1234</Port>
-  <ServerIP>127.0.0.1</ServerIP>
-  <DownloadPath>C:\Users\assaftayouri\Desktop\test2</DownloadPath>
-  <UploadPath>C:\Users\assaftayouri\Desktop\Test</UploadPath>
+  <Port>1236</Port>
+  <ServerIP>192.168.1.123</ServerIP>
+  <DownloadPath>C:\Users\assaftayouri\Desktop\a downloads</DownloadPath>
+  <UploadPath>C:\Users\assaftayouri\Desktop\a uploads</UploadPath>
 </ConfigDetails>
