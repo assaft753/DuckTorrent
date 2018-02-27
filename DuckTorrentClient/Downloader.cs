@@ -86,7 +86,7 @@ namespace DuckTorrentClient
             {
                 using (StreamWriter sw = new StreamWriter(networkStream))
                 {
-                    ChunkRequest chunkRequest = new ChunkRequest(fileSeed.FileName, initPos, ChunkSize, fileSeed.Size);
+                    ChunkRequest chunkRequest = new ChunkRequest(fileSeed.FileName, initPos, ChunkSize);
 
                     var xmlString = this.xMLHandler.Serialize<ChunkRequest>(chunkRequest);
                     var xmlStringRepair = xmlString.Replace('\n', ' ').Replace('\r', ' ').Trim();

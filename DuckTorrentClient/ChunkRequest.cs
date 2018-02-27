@@ -13,12 +13,11 @@ namespace DuckTorrentClient
         public int ChunkSize { get; set; }
         public long FileSize { get; set; }
 
-        public ChunkRequest(string fileName, int offset, int chunkSize, int fileSize)
+        public ChunkRequest(string fileName, int offset, int chunkSize)
         {
             FileName = fileName;
             Offset = offset;
             ChunkSize = chunkSize;
-            FileSize = fileSize;
         }
 
         public ChunkRequest() { }
