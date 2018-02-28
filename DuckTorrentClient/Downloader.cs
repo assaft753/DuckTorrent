@@ -77,10 +77,10 @@ namespace DuckTorrentClient
                     Stopwatch stopWatch = new Stopwatch();
                     stopWatch.Start();
 
-                    //if (System.IO.File.Exists(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName))
-                    // {
-                    //     System.IO.File.Delete(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName);
-                    // }
+                    if (System.IO.File.Exists(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName))
+                    {
+                        System.IO.File.Delete(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName);
+                    }
 
                     using (FileStream fileStream = new FileStream(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName, FileMode.Create, FileAccess.Write))
                     {

@@ -95,7 +95,8 @@ namespace ClientApplication
 
         private void DllHandler(string fileName)
         {
-            Assembly assembly = Assembly.LoadFrom(this.ConfigDetails.DownloadPath + "\\" + fileName);
+
+            Assembly assembly = System.Reflection.Assembly.Load(System.IO.File.ReadAllBytes(this.ConfigDetails.DownloadPath + "\\" + fileName));
             Type[] types = assembly.GetTypes();
             foreach (Type type in types)
             {
@@ -119,6 +120,7 @@ namespace ClientApplication
                     }
                 }
             }
+
         }
 
         private void ErrorUploading(int id)
