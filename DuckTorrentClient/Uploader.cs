@@ -42,14 +42,21 @@ namespace DuckTorrentClient
         {
             this.thread = new Thread(new ThreadStart(() =>
              {
-
-                 while (1 == 1)
+                 try
                  {
-                     var tcpClient = this.TcpListener.AcceptTcpClient();
-                     Task.Factory.StartNew(() => UploadHandler(tcpClient));
+                     while (1 == 1)
+                     {
+                         var tcpClient = this.TcpListener.AcceptTcpClient();
+                         Task.Factory.StartNew(() => UploadHandler(tcpClient));
+                     }
+                 }
+                 catch
+                 {
+
                  }
 
              }));
+            this.thread.IsBackground = true;
             this.thread.Start();
         }
 
@@ -61,7 +68,7 @@ namespace DuckTorrentClient
             }
             if (this.thread != null && this.thread.ThreadState == ThreadState.Running)
             {
-                this.thread.Suspend();
+                this.thread.Abort();
             }
         }
 
