@@ -1,12 +1,11 @@
-﻿using DuckTorrentClasses;
-using DuckTorrentClient;
+﻿using Animals;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ConsoleApp1
 {
@@ -14,38 +13,32 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            TcpClient tcpClient = new TcpClient("127.0.0.1", 1234);
-            using (NetworkStream networkStream = tcpClient.GetStream())
+            Assembly a = Assembly.LoadFrom(@"C:\Users\assaftayouri\source\repos\DuckTorrent\Dog.dll");
+            Type[] types = a.GetTypes();
+            if (types.Length > 0)
             {
-                using (StreamWriter sw = new StreamWriter(networkStream))
+                AnimalAttribute animal = (AnimalAttribute)Attribute.GetCustomAttribute(types[0], typeof(AnimalAttribute));
+                if (animal == null)
                 {
-                    ChunkRequest chunkRequest = new ChunkRequest("1.txt", 0, 15);
-                    var x = new XMLHandler();
-                    var y = x.Serialize<ChunkRequest>(chunkRequest);
-                    var z = y.Replace('\n', ' ').Replace('\r', ' ').Trim();
-                    sw.WriteLine(z);
-                    sw.Flush();
-                    var bytes = new byte[chunkRequest.ChunkSize];
-
-                    networkStream.Read(bytes, 0, bytes.Length);
-                    /*var bytes = new byte[1024];
-                    networkStream.Read(bytes, 0, bytes.Length);
-                    Console.WriteLine(bytes[0]);*/
-
-                    foreach (var bytea in bytes)
+                    MessageBox.Show("Unknown DLL");
+                }
+                else
+                {
+                    if (animal.Kind.Equals("Dog"))
                     {
-                        Console.WriteLine(bytea);
+                        object[] parameters = { "DogiDogo", "Black" };
+                        object obj = Activator.CreateInstance(types[0], parameters);
+                        MethodInfo m = types[0].GetMethod("Print");
+                        Console.WriteLine(m.Invoke(obj, null));
                     }
-                    /*networkStream.Write(System.Text.Encoding.Default.GetBytes("hello0"), 0, System.Text.Encoding.Default.GetBytes("hello1").Length);
-                    networkStream.Flush();
-                    var bytes = new byte[1024];
-                    networkStream.Read(bytes, 0, bytes.Length);
-                    Console.WriteLine(bytes[0]);
-                    networkStream.Close();*/
 
-                    //StreamWriter streamWriter = new StreamWriter(networkStream);
-                    //streamWriter.write();
-                    //streamWriter.Flush();
+                    else if (animal.Kind.Equals("Duck"))
+                    {
+                        object[] parameters = { "DonaldDuck", "White" };
+                        object obj = Activator.CreateInstance(types[0], parameters);
+                        MethodInfo m = types[0].GetMethod("Print");
+                        Console.WriteLine(m.Invoke(obj, null));
+                    }
                 }
             }
         }

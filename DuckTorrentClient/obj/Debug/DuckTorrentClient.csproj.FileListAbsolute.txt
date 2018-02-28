@@ -54,3 +54,5 @@ C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrent\DuckTorrentClient\obj
 C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient.csproj.CoreCompileInputs.cache
 C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient.exe
 C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrent\DuckTorrentClient\obj\Debug\DuckTorrentClient.pdb
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\Animals.dll
+C:\Users\assaftayouri\source\repos\DuckTorrent\DuckTorrentClient\bin\Debug\Animals.pdb

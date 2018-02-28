@@ -1,0 +1,6 @@
+C:\Users\assaftayouri\source\repos\DuckTorrent\Animals\bin\Debug\Animals.dll
+C:\Users\assaftayouri\source\repos\DuckTorrent\Animals\bin\Debug\Animals.pdb
+C:\Users\assaftayouri\source\repos\DuckTorrent\Animals\obj\Debug\Animals.csprojResolveAssemblyReference.cache
+C:\Users\assaftayouri\source\repos\DuckTorrent\Animals\obj\Debug\Animals.csproj.CoreCompileInputs.cache
+C:\Users\assaftayouri\source\repos\DuckTorrent\Animals\obj\Debug\Animals.dll
+C:\Users\assaftayouri\source\repos\DuckTorrent\Animals\obj\Debug\Animals.pdb

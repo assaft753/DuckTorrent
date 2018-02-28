@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3BE6C226-2380-4F07-BAFA-3BBC0BBF3C0D}</ProjectGuid>
+    <ProjectGuid>{50CC112C-A328-4A46-BCD2-325C5D918A37}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>ConsoleApp1</RootNamespace>
     <AssemblyName>ConsoleApp1</AssemblyName>
@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,13 +50,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DuckTorrentClasses\DuckTorrentClasses.csproj">
-      <Project>{12D0E8DE-F0C1-441E-B098-A26BBB26686C}</Project>
-      <Name>DuckTorrentClasses</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DuckTorrentClient\DuckTorrentClient.csproj">
-      <Project>{B1C4B24F-81FE-4DAC-BB52-8BB9766593ED}</Project>
-      <Name>DuckTorrentClient</Name>
+    <ProjectReference Include="..\Animals\Animals.csproj">
+      <Project>{F8B6DD8C-A0D6-4EA7-8F1A-181722B80F7F}</Project>
+      <Name>Animals</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

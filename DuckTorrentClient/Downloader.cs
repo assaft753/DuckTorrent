@@ -22,6 +22,7 @@ namespace DuckTorrentClient
         public event StartDownloading DownloadStarted;
         public event FinishDownloading DownloadFinished;
         public event ErrorDownloading DownloadError;
+        public event ReflectDLL ReflectDLL;
 
 
 
@@ -76,10 +77,10 @@ namespace DuckTorrentClient
                     Stopwatch stopWatch = new Stopwatch();
                     stopWatch.Start();
 
-                    if (System.IO.File.Exists(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName))
-                    {
-                        System.IO.File.Delete(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName);
-                    }
+                    //if (System.IO.File.Exists(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName))
+                    // {
+                    //     System.IO.File.Delete(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName);
+                    // }
 
                     using (FileStream fileStream = new FileStream(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName, FileMode.Create, FileAccess.Write))
                     {
@@ -101,6 +102,10 @@ namespace DuckTorrentClient
                     var speed = ((float)fileSeed.Size / 1000) / time;
                     System.IO.File.Copy(this.ConfigDetails.DownloadPath + "\\" + fileSeed.FileName, this.ConfigDetails.UploadPath + "\\" + fileSeed.FileName, true);
                     this.DownloadFinished(speed.ToString(), time.ToString(), fileSeed.FileName);
+                    if (fileSeed.FileName.EndsWith(".dll"))
+                    {
+                        this.ReflectDLL(fileSeed.FileName);
+                    }
                     if (DownloadingClients.ContainsKey(fileSeed.FileName) == true)
                     {
                         foreach (var client in DownloadingClients[fileSeed.FileName])

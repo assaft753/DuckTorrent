@@ -19,6 +19,8 @@ using System.IO;
 using System.ServiceModel;
 using DuckTorrentClient;
 using System.Net;
+using System.Reflection;
+using Animals;
 
 namespace ClientApplication
 {
@@ -35,6 +37,8 @@ namespace ClientApplication
 
     public delegate void CloseConnection();
 
+    public delegate void ReflectDLL(string fileName);
+
 
     public partial class MainWindow : Window
     {
@@ -47,7 +51,6 @@ namespace ClientApplication
         public Downloader downloader;
         private Uploader Uploader;
         private Boolean IsEnable;
-        //public event RefreshDownloadList DownloadListViewRefresh;
         public event CloseConnection CloseConnectionEvent;
 
         public MainWindow(ConfigDetails configDetails, IDuckTorrentServerApi serverProxy, TcpListener tcpListener, Boolean isEnable)
@@ -66,6 +69,7 @@ namespace ClientApplication
                 this.downloader.DownloadStarted += StartDownloading;
                 this.downloader.DownloadFinished += FinishDownlading;
                 this.downloader.DownloadError += ErrorDownloading;
+                this.downloader.ReflectDLL += DllHandler;
 
                 this.Uploader.UploadStarted += StartUploading;
                 this.Uploader.UploadFinished += FinishUploading;
@@ -88,6 +92,34 @@ namespace ClientApplication
             }
         }
 
+
+        private void DllHandler(string fileName)
+        {
+            Assembly assembly = Assembly.LoadFrom(this.ConfigDetails.DownloadPath + "\\" + fileName);
+            Type[] types = assembly.GetTypes();
+            foreach (Type type in types)
+            {
+                AnimalAttribute animal = (AnimalAttribute)Attribute.GetCustomAttribute(type, typeof(AnimalAttribute));
+                if (animal != null)
+                {
+                    if (animal.Kind.Equals("Dog"))
+                    {
+                        object[] parameters = { "DogiDogo", "Black" };
+                        object obj = Activator.CreateInstance(type, parameters);
+                        MethodInfo m = type.GetMethod("Print");
+                        MessageBox.Show((m.Invoke(obj, null)).ToString());
+                    }
+
+                    else if (animal.Kind.Equals("Duck"))
+                    {
+                        object[] parameters = { "DonaldDuck", "White" };
+                        object obj = Activator.CreateInstance(type, parameters);
+                        MethodInfo m = type.GetMethod("Print");
+                        MessageBox.Show((m.Invoke(obj, null).ToString()));
+                    }
+                }
+            }
+        }
 
         private void ErrorUploading(int id)
         {

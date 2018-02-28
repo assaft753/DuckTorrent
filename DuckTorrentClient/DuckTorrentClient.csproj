@@ -111,6 +111,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Animals\Animals.csproj">
+      <Project>{F8B6DD8C-A0D6-4EA7-8F1A-181722B80F7F}</Project>
+      <Name>Animals</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DuckTorrentClasses\DuckTorrentClasses.csproj">
       <Project>{12d0e8de-f0c1-441e-b098-a26bbb26686c}</Project>
       <Name>DuckTorrentClasses</Name>
