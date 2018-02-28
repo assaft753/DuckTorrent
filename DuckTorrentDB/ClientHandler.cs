@@ -32,10 +32,13 @@ namespace DuckTorrentDB
 
                 using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
                 {
-                    User user = new User();
-                    user.UserName = userName;
-                    user.Password = password;
-                    user.IsOnline = 1;
+                    User user = new User()
+                    {
+                        UserName = userName,
+                        Password = password,
+                        IsOnline = 0,
+                        IsEnable = 1
+                    };
                     db.Users.Add(user);
                     db.SaveChanges();
                 }
@@ -53,7 +56,8 @@ namespace DuckTorrentDB
 
                 foreach (var item in users)
                 {
-                    s += "#" + item.UserName + " " + item.Password + " " + item.IsOnline + "\n";
+                    s += "User Name: " + item.UserName + "\n" + "User Password: " + item.Password + "\n" + "IsOnline: " + item.IsOnline + "\n" + "IsEnable: " + item.IsEnable + "\n";
+                    s += "#####################################################" + "\n";
                 }
                 return s;
             }
@@ -109,18 +113,28 @@ namespace DuckTorrentDB
             return true;
         }
 
-        public void ClientOn(string userName, String ip, int port, List<DuckTorrentClasses.File> files)
+        public Boolean ClientOn(string userName, String ip, int port, List<DuckTorrentClasses.File> files)
         {
+            Boolean answer;
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
             {
                 User user = db.Users.Single(c => c.UserName == userName);
-                user.IsOnline = 1;
-
+                if (user.IsEnable == 1)
+                {
+                    user.IsOnline = 1;
+                    answer = true;
+                }
+                else
+                {
+                    user.IsOnline = 0;
+                    answer = false;
+                }
                 db.SaveChanges();
             }
             var fileHandler = new FileHandler();
             fileHandler.RemoveFiles(userName);
             fileHandler.AddFiles(ip, port, userName, files);
+            return answer;
         }
 
         public void ClientOff(string userName, string password)
@@ -132,6 +146,34 @@ namespace DuckTorrentDB
                 db.SaveChanges();
             }
             new FileHandler().RemoveFiles(userName);
+        }
+
+        public void EnableUser(string userName)
+        {
+            using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
+            {
+                User user = db.Users.Single(c => c.UserName == userName);
+                user.IsEnable = 1;
+                db.SaveChanges();
+            }
+        }
+        public void DisableUser(string userName)
+        {
+            using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
+            {
+                User user = db.Users.Single(c => c.UserName == userName);
+                user.IsEnable = 0;
+                db.SaveChanges();
+            }
+        }
+
+        public Boolean IsEnable(string userName)
+        {
+            using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
+            {
+                User user = db.Users.Single(c => c.UserName == userName);
+                return user.IsEnable == 1;
+            }
         }
 
 

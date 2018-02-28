@@ -23,6 +23,7 @@ public partial class MainMenu : System.Web.UI.Page
 
     protected void Admin_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Admin.aspx");
+        //Response.Redirect("LogIn.aspx");
+        //Response.Redirect("Admin.aspx");
     }
 }

@@ -20,6 +20,7 @@
     <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="IsOnline" Type="Int32" Nullable="false" />
+    <Property Name="IsEnable" Type="Int32" Nullable="false" />
   </EntityType>
   <EntityContainer Name="DuckTorrentDBEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Files" EntityType="Self.File" />

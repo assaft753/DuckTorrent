@@ -25,6 +25,7 @@
           <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="IsOnline" Type="int" Nullable="false" />
+          <Property Name="IsEnable" Type="int" Nullable="false" />
         </EntityType>
         <EntityContainer Name="DuckTorrentDBModelStoreContainer">
           <EntitySet Name="Files" EntityType="Self.Files" Schema="dbo" store:Type="Tables" />
@@ -54,6 +55,7 @@
           <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="IsOnline" Type="Int32" Nullable="false" />
+          <Property Name="IsEnable" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityContainer Name="DuckTorrentDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Files" EntityType="Self.File" />
@@ -79,6 +81,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="DuckTorrentDBModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />

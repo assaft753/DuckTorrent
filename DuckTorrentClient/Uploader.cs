@@ -59,7 +59,10 @@ namespace DuckTorrentClient
             {
                 keyval.Value.Client.Close();
             }
-            this.thread.Suspend();
+            if (this.thread != null && this.thread.ThreadState == ThreadState.Running)
+            {
+                this.thread.Suspend();
+            }
         }
 
         private void UploadHandler(TcpClient tcpClient)

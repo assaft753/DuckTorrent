@@ -12,6 +12,36 @@ namespace DuckTorrentService
 {
     public class DuckTorrentServerApi : IDuckTorrentServerApi
     {
+        public bool CheckEnable(string userByXML)
+        {
+            string toPrint = "";
+            try
+            {
+                XMLHandler xMLHandler = new XMLHandler();
+                var user = xMLHandler.Deserialize<UserDetails>(userByXML);
+                toPrint += "User Name: " + user.UserName + " Check If User Enable..... ";
+                var userHandler = new ClientHandler();
+                var enable = userHandler.IsEnable(user.UserName);
+                if (enable == true)
+                {
+                    toPrint += "User Enable ";
+                }
+                else
+                {
+                    toPrint += "User Disable ";
+                }
+                Console.WriteLine(toPrint);
+                return enable;
+            }
+            catch (Exception ex)
+            {
+                toPrint += "400" + " " + ex.Message;
+                Console.WriteLine(toPrint);
+                return false;
+            }
+
+        }
+
         public string CheckUserExists(string userByXML)
         {
             string toPrint = "";
@@ -106,8 +136,15 @@ namespace DuckTorrentService
                 toPrint += "User Name: " + user.UserInfo.UserName + " Trying To Sign In.... ";
                 ClientHandler clientHandler = new ClientHandler();
                 clientHandler.CheckUser(user.UserInfo.UserName, user.UserInfo.Password);
-                clientHandler.ClientOn(user.UserInfo.UserName, user.Ip, user.Port, user.Files);
-                toPrint += "User Is Now Online And Signed In ";
+                var answer = clientHandler.ClientOn(user.UserInfo.UserName, user.Ip, user.Port, user.Files);
+                if (answer == true)
+                {
+                    toPrint += "User Is Now Online And Signed In ";
+                }
+                else
+                {
+                    toPrint += "User Is Offline Because Its Disable";
+                }
                 Console.WriteLine(toPrint);
                 return "200";
             }

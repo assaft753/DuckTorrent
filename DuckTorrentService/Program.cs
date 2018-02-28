@@ -1,4 +1,5 @@
 ﻿using DuckTorrentClasses;
+using DuckTorrentDB;
 using DuckTorrentService;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,8 @@ namespace ConsoleApp1
             {
 
                 sh.Open();
-                Console.WriteLine("SSS");
+                ClientHandler clientHandler = new ClientHandler();
+                Console.WriteLine(clientHandler.ShowUsers());
                 while (1 == 1) { }
             }
         }

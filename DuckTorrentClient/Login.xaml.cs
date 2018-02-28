@@ -34,6 +34,7 @@ namespace ClientApplication
         private IDuckTorrentServerApi ServerProxy;
         private ChannelFactory<IDuckTorrentServerApi> Factory;
         private TcpListener TcpListener;
+        private Boolean IsEanble;
 
         public Login()
         {
@@ -54,7 +55,7 @@ namespace ClientApplication
         private void MoveToMainWindows()
         {
             SignInUser();
-            MainWindow mainWindow = new MainWindow(this.ConfigDetails, this.ServerProxy, this.TcpListener);
+            MainWindow mainWindow = new MainWindow(this.ConfigDetails, this.ServerProxy, this.TcpListener, this.IsEanble);
             mainWindow.CloseConnectionEvent += this.CloseConnection;
             PutData();
             mainWindow.Show();
@@ -123,6 +124,7 @@ namespace ClientApplication
             {
                 throw new Exception(serverRespond);
             }
+            this.IsEanble = ServerProxy.CheckEnable(this.xMLHandler.Serialize<UserDetails>(ConfigDetails.User));
         }
 
         private Boolean CheckIfErrorFromServer(string serverRespond)

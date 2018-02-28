@@ -21,5 +21,8 @@ namespace DuckTorrentService
         string CheckUserExists(string userByXML);
         [OperationContract]
         string RefreshFiles(string userByXML);
+        [OperationContract]
+        Boolean CheckEnable(string userByXML);
+
     }
 }

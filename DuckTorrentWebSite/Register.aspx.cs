@@ -4,12 +4,13 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
+using DuckTorrentDB;
 public partial class Register : System.Web.UI.Page
 {
+    ClientHandler clientHandler;
     protected void Page_Load(object sender, EventArgs e)
     {
-     
+        clientHandler = new ClientHandler();
     }
 
 
@@ -30,7 +31,9 @@ public partial class Register : System.Web.UI.Page
         try
         {
             checkValid(name, password);
-            //add to database
+            clientHandler.AddUser(name, password);
+            Response.Redirect("MainMenu.aspx");
+
         }
         catch (Exception ex)
         {

@@ -46,14 +46,16 @@ namespace ClientApplication
         private List<DownloadView> downloadView;
         public Downloader downloader;
         private Uploader Uploader;
+        private Boolean IsEnable;
         //public event RefreshDownloadList DownloadListViewRefresh;
         public event CloseConnection CloseConnectionEvent;
 
-        public MainWindow(ConfigDetails configDetails, IDuckTorrentServerApi serverProxy, TcpListener tcpListener)
+        public MainWindow(ConfigDetails configDetails, IDuckTorrentServerApi serverProxy, TcpListener tcpListener, Boolean isEnable)
         {
             try
             {
                 InitializeComponent();
+                this.IsEnable = isEnable;
                 this.ConfigDetails = configDetails;
                 this.ServerProxy = serverProxy;
                 this.TcpListener = tcpListener;
@@ -73,8 +75,13 @@ namespace ClientApplication
                 this.uploadView = new List<UploadView>();
                 this.listView_Downloads.ItemsSource = this.downloadView;
                 this.listView_Uploads.ItemsSource = uploadView;
-                this.Uploader.StartListening();
+                if (isEnable == true)
+                {
+                    this.Uploader.StartListening();
+                }
+
             }
+
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
@@ -202,8 +209,11 @@ namespace ClientApplication
 
         private void listViewResults_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            FileSeed fileSeed = (FileSeed)this.listView_Results.SelectedItem;
-            Task.Factory.StartNew(() => this.downloader.StartDownloading(fileSeed));
+            if (this.IsEnable == true)
+            {
+                FileSeed fileSeed = (FileSeed)this.listView_Results.SelectedItem;
+                Task.Factory.StartNew(() => this.downloader.StartDownloading(fileSeed));
+            }
         }
 
         private void search_Btn_Click(object sender, RoutedEventArgs e)
@@ -227,7 +237,7 @@ namespace ClientApplication
         private void logOut_Btn_Click(object sender, RoutedEventArgs e)
         {
             //System.IO.File.Delete(Login.CONFIGFILE);
-            LogOutUser();
+            Close();
 
         }
 
@@ -244,10 +254,6 @@ namespace ClientApplication
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                Close();
             }
         }
 
@@ -267,6 +273,7 @@ namespace ClientApplication
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            LogOutUser();
             this.Uploader.StopListening();
             this.downloader.StopDownloading();
             this.CloseConnectionEvent();

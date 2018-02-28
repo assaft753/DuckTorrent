@@ -15,6 +15,7 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="DuckTorrentDBModel.User">
         <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
           <ScalarProperty Name="UserName" ColumnName="UserName" />
           <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />
