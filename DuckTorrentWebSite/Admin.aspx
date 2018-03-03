@@ -10,18 +10,21 @@
             width: 496px;
             height: 9px;
         }
+
         .auto-style3 {
             margin-right: 0px;
             margin-top: 58px;
         }
+
         .auto-style4 {
             height: 96px;
             width: 121px;
         }
+
         .auto-style5 {
             margin-top: 0px;
         }
-        </style>
+    </style>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -42,15 +45,15 @@
             <asp:Label ID="TotalFiles" runat="server" Text="Label"></asp:Label>
             <br />
         </asp:Panel>
-        <asp:GridView ID="GridView1" runat="server" CellPadding="4" ForeColor="#333333" GridLines="None" OnSelectedIndexChanged="GridView1_SelectedIndexChanged" Height="290px" style="margin-bottom: 52px" AutoGenerateColumns="False" CssClass="auto-style3" DataKeyNames="UserName" DataSourceID="SqlDataSource1" Width="450px" OnRowDeleted="GridView1_RowDeleted" AllowPaging="True" CellSpacing="1" DataMember="DefaultView">
-               <AlternatingRowStyle BackColor="White" />
+        <asp:GridView ID="GridView1" runat="server" CellPadding="4" ForeColor="#333333" GridLines="None" Height="290px" Style="margin-bottom: 52px" AutoGenerateColumns="False" CssClass="auto-style3" DataKeyNames="UserName" DataSourceID="SqlDataSource1" Width="450px" OnRowDeleted="GridView1_RowDeleted" AllowPaging="True" CellSpacing="1" DataMember="DefaultView">
+            <AlternatingRowStyle BackColor="White" />
             <Columns>
-                <asp:CommandField ShowSelectButton="True"  ButtonType="Button"/>
-                <asp:CommandField ShowDeleteButton="True" ButtonType="Button"  />
-                <asp:CommandField ShowEditButton="True" ButtonType="Button"  />
+                <asp:CommandField ShowSelectButton="True" ButtonType="Button" />
+                <asp:CommandField ShowDeleteButton="True" ButtonType="Button" />
+                <asp:CommandField ShowEditButton="True" ButtonType="Button" />
                 <asp:BoundField DataField="UserName" HeaderText="UserName" ReadOnly="True" SortExpression="UserName" />
                 <asp:BoundField DataField="Password" HeaderText="Password" SortExpression="Password" />
-                <asp:BoundField DataField="IsOnline" HeaderText="IsOnline" SortExpression="IsOnline" />
+                <asp:BoundField DataField="IsEnable" HeaderText="IsEnable" SortExpression="IsEnable" />
             </Columns>
             <EditRowStyle BackColor="#7C6F57" BorderColor="#FF9933" HorizontalAlign="Center" />
             <FooterStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White" />
@@ -63,27 +66,27 @@
             <SortedDescendingCellStyle BackColor="#D4DFE1" />
             <SortedDescendingHeaderStyle BackColor="#15524A" />
         </asp:GridView>
-        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:DuckTorrentDBConnectionString %>" SelectCommand="SELECT * FROM [Users]" ConflictDetection="CompareAllValues" DeleteCommand="DELETE FROM [Users] WHERE [UserName] = @original_UserName AND [Password] = @original_Password AND [IsOnline] = @original_IsOnline" InsertCommand="INSERT INTO [Users] ([UserName], [Password], [IsOnline]) VALUES (@UserName, @Password, @IsOnline)" OldValuesParameterFormatString="original_{0}" UpdateCommand="UPDATE [Users] SET [Password] = @Password, [IsOnline] = @IsOnline WHERE [UserName] = @original_UserName AND [Password] = @original_Password AND [IsOnline] = @original_IsOnline">
+        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:DuckTorrentDBConnectionString %>" SelectCommand="SELECT [UserName], [Password], [IsEnable] FROM [Users]" ConflictDetection="CompareAllValues" DeleteCommand="DELETE FROM [Users] WHERE [UserName] = @original_UserName AND [Password] = @original_Password AND [IsEnable] = @original_IsEnable" InsertCommand="INSERT INTO [Users] ([UserName], [Password], [IsEnable]) VALUES (@UserName, @Password, @IsEnable)" OldValuesParameterFormatString="original_{0}" UpdateCommand="UPDATE [Users] SET [Password] = @Password, [IsEnable] = @IsEnable WHERE [UserName] = @original_UserName AND [Password] = @original_Password AND [IsEnable] = @original_IsEnable" OnSelecting="SqlDataSource1_Selecting">
             <DeleteParameters>
                 <asp:Parameter Name="original_UserName" Type="String" />
                 <asp:Parameter Name="original_Password" Type="String" />
-                <asp:Parameter Name="original_IsOnline" Type="Int32" />
+                <asp:Parameter Name="original_IsEnable" Type="Int32" />
             </DeleteParameters>
             <InsertParameters>
                 <asp:Parameter Name="UserName" Type="String" />
                 <asp:Parameter Name="Password" Type="String" />
-                <asp:Parameter Name="IsOnline" Type="Int32" />
+                <asp:Parameter Name="IsEnable" Type="Int32" />
             </InsertParameters>
             <UpdateParameters>
                 <asp:Parameter Name="Password" Type="String" />
-                <asp:Parameter Name="IsOnline" Type="Int32" />
+                <asp:Parameter Name="IsEnable" Type="Int32" />
                 <asp:Parameter Name="original_UserName" Type="String" />
                 <asp:Parameter Name="original_Password" Type="String" />
-                <asp:Parameter Name="original_IsOnline" Type="Int32" />
+                <asp:Parameter Name="original_IsEnable" Type="Int32" />
             </UpdateParameters>
         </asp:SqlDataSource>
         <br />
-        <asp:Label ID="Label4" runat="server" Text="File name:" ToolTip="Choose a file to show" ></asp:Label>
+        <asp:Label ID="Label4" runat="server" Text="File name:" ToolTip="Choose a file to show"></asp:Label>
         <asp:TextBox ID="SearchText" runat="server"></asp:TextBox>
         <asp:Button ID="Button1" runat="server" Text="Search" OnClick="Button1_Click" Height="45px" />
         <br />
@@ -114,14 +117,14 @@
         <br />
         <br />
         <asp:GridView ID="GridView2" runat="server" BackColor="White" BorderColor="#3366CC" BorderStyle="None" BorderWidth="1px" CellPadding="4" AutoGenerateColumns="False" DataKeyNames="UserName,IP,Port,FIleName" DataSourceID="SqlDataSource2" Width="900px">
-           <Columns>
+            <Columns>
                 <asp:BoundField DataField="UserName" HeaderText="UserName" ReadOnly="True" SortExpression="UserName" />
                 <asp:BoundField DataField="IP" HeaderText="IP" ReadOnly="True" SortExpression="IP" />
                 <asp:BoundField DataField="Port" HeaderText="Port" ReadOnly="True" SortExpression="Port" />
                 <asp:BoundField DataField="FIleName" HeaderText="FIleName" ReadOnly="True" SortExpression="FIleName" />
                 <asp:BoundField DataField="FileSize" HeaderText="FileSize" SortExpression="FileSize" />
             </Columns>
-             <FooterStyle BackColor="#99CCCC" ForeColor="#003399" />
+            <FooterStyle BackColor="#99CCCC" ForeColor="#003399" />
             <HeaderStyle BackColor="#003399" Font-Bold="True" ForeColor="#CCCCFF" />
             <PagerStyle BackColor="#99CCCC" ForeColor="#003399" HorizontalAlign="Left" />
             <RowStyle ForeColor="#003399" BackColor="White" />

@@ -12,14 +12,14 @@ public partial class Admin : System.Web.UI.Page
 {
     ClientHandler clientHandler = new ClientHandler();
     FileHandler fileHandler = new FileHandler();
-   
+
 
     protected void Page_Load(object sender, EventArgs e)
     {
         setData();
         GridViewSearch.Visible = false;
 
-     
+
     }
 
     private void setData()
@@ -32,13 +32,7 @@ public partial class Admin : System.Web.UI.Page
 
     }
 
-    protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        
-    }
 
-
-    
     protected void GridView1_RowDeleted(object sender, GridViewDeletedEventArgs e)
     {
         setData();
@@ -52,11 +46,17 @@ public partial class Admin : System.Web.UI.Page
         {
             GridViewSearch.Visible = true;
             GridView2.Visible = false;
-        }else
+        }
+        else
         {
             GridViewSearch.Visible = false;
             GridView2.Visible = true;
         }
+
+    }
+
+    protected void SqlDataSource1_Selecting(object sender, SqlDataSourceSelectingEventArgs e)
+    {
 
     }
 }
