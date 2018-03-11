@@ -108,7 +108,6 @@ namespace DuckTorrentDB
                         result[nameGroup.Key].Seeds.Add(new IP(file.IP, file.Port));
                     }
                 }
-
                 return result;
             }
         }

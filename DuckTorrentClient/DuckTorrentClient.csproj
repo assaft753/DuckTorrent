@@ -64,7 +64,7 @@
     <Compile Include="Downloader.cs" />
     <Compile Include="DownloadTask.cs" />
     <Compile Include="DownloadView.cs" />
-    <Compile Include="UploadDetails.cs" />
+    <Compile Include="UploadView.cs" />
     <Compile Include="Uploader.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,7 @@ namespace DuckTorrentClient
     {
         public string FileName { get; set; }
         public string Status { get; set; }
-        public string Size { get; set; }// + "Bytes"; }
+        public string Size { get; set; }
         public string Speed { get; set; }
         public string TimePassed { get; set; }
         public string Sources { get; set; }

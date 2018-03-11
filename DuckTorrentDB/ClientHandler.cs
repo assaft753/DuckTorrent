@@ -12,17 +12,18 @@ namespace DuckTorrentDB
 
         public bool FindUser(string userName)
         {
-            DuckTorrentDBEntities db = new DuckTorrentDBEntities();
+            using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
+            {
 
-            var account = from ac in db.Users
-                          where ac.UserName == userName
-                          select ac;
+                var account = from ac in db.Users
+                              where ac.UserName == userName
+                              select ac;
 
-            if (account.Count() == 0)
-                return false;
+                if (account.Count() == 0)
+                    return false;
 
-            return true;
-
+                return true;
+            }
         }
 
         public void AddUser(string userName, string password)
@@ -65,35 +66,39 @@ namespace DuckTorrentDB
 
         public List<User> GetUsers()
         {
-            DuckTorrentDBEntities db = new DuckTorrentDBEntities();
+            using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
+            {
 
-            var users = from user in db.Users select user;
+                var users = from user in db.Users select user;
 
-            List<User> clientsList = new List<User>();
+                List<User> clientsList = new List<User>();
 
-            foreach (var item in users)
-                clientsList.Add(item);
-            return clientsList;
+                foreach (var item in users)
+                    clientsList.Add(item);
+                return clientsList;
+            }
         }
 
         public int GetTotalNumberOfUsers()
         {
-            DuckTorrentDBEntities db = new DuckTorrentDBEntities();
-
-            var users = from user in db.Users select user;
-
-            return users.Count();
+            using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
+            {
+                var users = from user in db.Users select user;
+                return users.Count();
+            }
         }
 
         public int getNumberOfOnlineUsers()
         {
-            DuckTorrentDBEntities db = new DuckTorrentDBEntities();
+            using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
+            {
 
-            var users = from user in db.Users
-                        where user.IsOnline == 1
-                        select user;
+                var users = from user in db.Users
+                            where user.IsOnline == 1
+                            select user;
 
-            return users.Count();
+                return users.Count();
+            }
         }
 
         public Boolean CheckUser(String userName, string password)
@@ -101,16 +106,16 @@ namespace DuckTorrentDB
             if (!FindUser(userName))
                 throw new Exception("User name does not exiest");
 
-            DuckTorrentDBEntities db = new DuckTorrentDBEntities();
+            using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
+            {
+                var users = from user in db.Users
+                            where user.UserName == userName && user.Password == password
+                            select user;
 
-            var users = from user in db.Users
-                        where user.UserName == userName
-                        && user.Password == password
-                        select user;
-
-            if (users.Count() != 1)
-                throw new Exception("Not valid password");
-            return true;
+                if (users.Count() != 1)
+                    throw new Exception("Not valid password");
+                return true;
+            }
         }
 
         public Boolean ClientOn(string userName, String ip, int port, List<DuckTorrentClasses.File> files)
@@ -147,7 +152,6 @@ namespace DuckTorrentDB
             }
             new FileHandler().RemoveFiles(userName);
         }
-
         public void EnableUser(string userName)
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
@@ -157,6 +161,7 @@ namespace DuckTorrentDB
                 db.SaveChanges();
             }
         }
+
         public void DisableUser(string userName)
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())

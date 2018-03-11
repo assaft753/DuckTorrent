@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-16"?>
 <ConfigDetails xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <User>
-    <UserName>a</UserName>
+    <UserName>aa</UserName>
     <Password>1</Password>
   </User>
   <Port>1212</Port>

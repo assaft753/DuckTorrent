@@ -49,14 +49,13 @@ namespace DuckTorrentClient
                     int currentPos = 0;
                     for (int i = 0; i < fileSeed.Seeds.Count; i++)
                     {
-
                         TcpClient tcpClient = new TcpClient(fileSeed.Seeds[i].Ip, fileSeed.Seeds[i].Port);
                         tcpClient.ReceiveTimeout = 5000;
                         tcpClient.SendTimeout = 5000;
                         tcpClientsList.Add(tcpClient);
                     }
-                    DownloadingClients.Add(fileSeed.FileName, tcpClientsList);
 
+                    DownloadingClients.Add(fileSeed.FileName, tcpClientsList);
 
                     for (int j = 0; j < fileSeed.Seeds.Count; j++)
                     {
@@ -72,7 +71,6 @@ namespace DuckTorrentClient
                             currentPos += ChunkSize;
                         }
                     }
-
 
                     Stopwatch stopWatch = new Stopwatch();
                     stopWatch.Start();

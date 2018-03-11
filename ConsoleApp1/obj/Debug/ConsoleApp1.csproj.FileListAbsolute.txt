@@ -1,9 +1,0 @@
-C:\Users\assaftayouri\source\repos\DuckTorrent\ConsoleApp1\bin\Debug\ConsoleApp1.exe.config
-C:\Users\assaftayouri\source\repos\DuckTorrent\ConsoleApp1\bin\Debug\ConsoleApp1.exe
-C:\Users\assaftayouri\source\repos\DuckTorrent\ConsoleApp1\bin\Debug\ConsoleApp1.pdb
-C:\Users\assaftayouri\source\repos\DuckTorrent\ConsoleApp1\bin\Debug\Animals.dll
-C:\Users\assaftayouri\source\repos\DuckTorrent\ConsoleApp1\bin\Debug\Animals.pdb
-C:\Users\assaftayouri\source\repos\DuckTorrent\ConsoleApp1\obj\Debug\ConsoleApp1.csprojResolveAssemblyReference.cache
-C:\Users\assaftayouri\source\repos\DuckTorrent\ConsoleApp1\obj\Debug\ConsoleApp1.csproj.CoreCompileInputs.cache
-C:\Users\assaftayouri\source\repos\DuckTorrent\ConsoleApp1\obj\Debug\ConsoleApp1.exe
-C:\Users\assaftayouri\source\repos\DuckTorrent\ConsoleApp1\obj\Debug\ConsoleApp1.pdb
