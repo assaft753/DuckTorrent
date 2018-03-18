@@ -5,8 +5,8 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="6fae0943af50491395f7c34809b4b4ea" Name="Diagram1">
-        <EntityTypeShape EntityType="DuckTorrentDBModel.File" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DuckTorrentDBModel.User" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DuckTorrentDBModel.File" Width="1.25" PointX="4.625" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DuckTorrentDBModel.User" Width="1.5" PointX="6" PointY="1.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

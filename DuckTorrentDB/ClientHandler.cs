@@ -10,6 +10,7 @@ namespace DuckTorrentDB
     {
         public ClientHandler() { }
 
+        //FIND USER IF EXISTS
         public bool FindUser(string userName)
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
@@ -26,6 +27,7 @@ namespace DuckTorrentDB
             }
         }
 
+        //ADD USER
         public void AddUser(string userName, string password)
         {
             if (!FindUser(userName))
@@ -48,6 +50,7 @@ namespace DuckTorrentDB
                 throw new Exception("account exist");
         }
 
+        //SHOW ALL USERS
         public String ShowUsers()
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
@@ -64,6 +67,7 @@ namespace DuckTorrentDB
             }
         }
 
+        //GET ALL USERS
         public List<User> GetUsers()
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
@@ -79,6 +83,7 @@ namespace DuckTorrentDB
             }
         }
 
+        //GET NUM OF USERS
         public int GetTotalNumberOfUsers()
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
@@ -88,6 +93,7 @@ namespace DuckTorrentDB
             }
         }
 
+        //GET ALL USERS ONLINE
         public int getNumberOfOnlineUsers()
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
@@ -101,6 +107,7 @@ namespace DuckTorrentDB
             }
         }
 
+        //CHECK IF USER EXISTS AND MATCH THE PASSWORD
         public Boolean CheckUser(String userName, string password)
         {
             if (!FindUser(userName))
@@ -118,6 +125,7 @@ namespace DuckTorrentDB
             }
         }
 
+        //PUT USER IN STATUS ON AND UPDATE FILES
         public Boolean ClientOn(string userName, String ip, int port, List<DuckTorrentClasses.File> files)
         {
             Boolean answer;
@@ -142,6 +150,7 @@ namespace DuckTorrentDB
             return answer;
         }
 
+        //PUT USER IN STATUS OFF AND DELETE FILES
         public void ClientOff(string userName, string password)
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
@@ -152,6 +161,8 @@ namespace DuckTorrentDB
             }
             new FileHandler().RemoveFiles(userName);
         }
+
+        //ENABLE USER BY USER NAME
         public void EnableUser(string userName)
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
@@ -162,6 +173,7 @@ namespace DuckTorrentDB
             }
         }
 
+        //DIASABLE USER BY USER NAME
         public void DisableUser(string userName)
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
@@ -172,6 +184,7 @@ namespace DuckTorrentDB
             }
         }
 
+        //CHECK IF USER ISENABLE
         public Boolean IsEnable(string userName)
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())

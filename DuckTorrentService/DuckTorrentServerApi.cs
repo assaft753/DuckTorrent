@@ -12,6 +12,7 @@ namespace DuckTorrentService
 {
     public class DuckTorrentServerApi : IDuckTorrentServerApi
     {
+        //CHECK IF USER ENABLE
         public bool CheckEnable(string userByXML)
         {
             string toPrint = "";
@@ -42,6 +43,7 @@ namespace DuckTorrentService
 
         }
 
+        //CKECK IF USER EXISTS
         public string CheckUserExists(string userByXML)
         {
             string toPrint = "";
@@ -64,6 +66,8 @@ namespace DuckTorrentService
             }
         }
 
+
+        //REFRESH SET OF FILES
         public string RefreshFiles(string userByXML)
         {
             string toPrint = "";
@@ -90,6 +94,8 @@ namespace DuckTorrentService
 
         }
 
+
+        //SERACH FOR FILE THAT CONTAINS SOME LETTERS 
         public string SearchFile(string fileByXML)
         {
             string toPrint = "";
@@ -125,6 +131,8 @@ namespace DuckTorrentService
             }
         }
 
+
+        //SIGN IN THE USER FOR THE APPLICATION
         public string SignIn(string userByXML)
         {
             string toPrint = "";
@@ -157,6 +165,7 @@ namespace DuckTorrentService
 
         }
 
+        //SIGN OUT USER FOR THE APPLICATION
         public string SignOut(string userByXML)
         {
             string toPrint = "";

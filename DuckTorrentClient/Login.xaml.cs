@@ -51,7 +51,7 @@ namespace ClientApplication
                 PutData();
             }
         }
-
+        //MOVE TO MAIN WINDOW
         private void MoveToMainWindows()
         {
             SignInUser();
@@ -61,7 +61,7 @@ namespace ClientApplication
             mainWindow.Show();
             this.Hide();
         }
-
+        //INITIAL ALL CONNECTION AND DETAILS FOR THE USER
         private void InitDetailsAndConnections()
         {
             CheckInputDetails();
@@ -69,7 +69,7 @@ namespace ClientApplication
             CheckUserValidtion();
             OpenTcpListener();
         }
-
+        //PUT EXISITNG USER DATA
         private void PutData()
         {
             this.username_textBox.Text = ConfigDetails.User.UserName;
@@ -79,7 +79,7 @@ namespace ClientApplication
             this.serverport_Textbox.Text = ConfigDetails.Port.ToString();
 
         }
-
+        //CHECK THE INPUT DETAILS
         private void CheckInputDetails()
         {
             if (this.ConfigDetails.Port == 0)
@@ -105,7 +105,7 @@ namespace ClientApplication
             }
 
         }
-
+        //OPEN TCP SOCKET FOR LISTENING
         private void OpenTcpListener()
         {
             if (this.TcpListener != null && this.TcpListener.Server.IsBound == true)
@@ -116,7 +116,7 @@ namespace ClientApplication
             this.TcpListener = new TcpListener(endPoint);
             this.TcpListener.Start();
         }
-
+        //CHECK USER FOR VALIDATION
         private void CheckUserValidtion()
         {
             string serverRespond = ServerProxy.CheckUserExists(this.xMLHandler.Serialize<UserDetails>(ConfigDetails.User));
@@ -126,7 +126,7 @@ namespace ClientApplication
             }
             this.IsEanble = ServerProxy.CheckEnable(this.xMLHandler.Serialize<UserDetails>(ConfigDetails.User));
         }
-
+        //CHECK ERROR FROM FROM USER
         private Boolean CheckIfErrorFromServer(string serverRespond)
         {
             string answerCode = "";
@@ -140,7 +140,7 @@ namespace ClientApplication
             }
             return true;
         }
-
+        //CONNECT TO SERVER 
         private void OpenServerSocket()
         {
             if (this.Factory != null && this.Factory.State == CommunicationState.Opened)
@@ -152,7 +152,7 @@ namespace ClientApplication
             this.Factory = factory;
             this.ServerProxy = factory.CreateChannel();
         }
-
+        //CHECK VAKIDATION OF XML CONFIGURATION
         private void CheckXMLConfigValidation()
         {
             try
@@ -218,7 +218,7 @@ namespace ClientApplication
                 System.Windows.MessageBox.Show(ex.Message);
             }
         }
-
+        //SIGN IN FOR USER WITH RELEVAENT FILES
         private void SignInUser()
         {
             string ip = GetIP();
@@ -230,7 +230,7 @@ namespace ClientApplication
                 throw new Exception(serverRespond);
             }
         }
-
+        //GET IP OF USER
         private string GetIP()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
@@ -257,7 +257,7 @@ namespace ClientApplication
             }
             return files;
         }
-
+        //UPDATE FROM UI DETAILS
         private void UpdateConfiguration()
         {
             this.ConfigDetails.User.UserName = username_textBox.Text;
@@ -268,6 +268,7 @@ namespace ClientApplication
             this.ConfigDetails.UploadPath = this.uploadPath_Textbox.Text;
         }
 
+        //CLOSE ALL CONFIGURATION
         private void CloseConnection()
         {
             this.Factory.Close();

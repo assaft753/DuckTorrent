@@ -163,8 +163,6 @@ namespace ClientApplication
             this.listView_Uploads.Dispatcher.Invoke(new RefreshUploadList(this.RefreshUploadListView));
         }
 
-
-
         private void FinishDownlading(string Speed, string TimePassed, String fileName)
         {
             foreach (var download in downloadView)
@@ -270,9 +268,7 @@ namespace ClientApplication
 
         private void logOut_Btn_Click(object sender, RoutedEventArgs e)
         {
-            //System.IO.File.Delete(Login.CONFIGFILE);
             Close();
-
         }
 
         private void LogOutUser()

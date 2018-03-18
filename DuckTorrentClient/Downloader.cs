@@ -19,10 +19,10 @@ namespace DuckTorrentClient
         Dictionary<String, List<TcpClient>> DownloadingClients;
         ConfigDetails ConfigDetails;
         XMLHandler xMLHandler;
-        public event StartDownloading DownloadStarted;
-        public event FinishDownloading DownloadFinished;
-        public event ErrorDownloading DownloadError;
-        public event ReflectDLL ReflectDLL;
+        public event StartDownloading DownloadStarted;//EVENT FOR GUI FOR STARTED DOWNLOADING
+        public event FinishDownloading DownloadFinished;//EVENT FOR GUI FOR FINISHED DOWNLOADING
+        public event ErrorDownloading DownloadError;//EVENT FOR GUI FOR ERROR DOWNLOADING
+        public event ReflectDLL ReflectDLL;//EVENT FOR HANDLING DLL FILE THAT USER DOWNLOADED
 
 
 
@@ -34,6 +34,8 @@ namespace DuckTorrentClient
             DownloadingClients = new Dictionary<string, List<TcpClient>>();
         }
 
+
+        //FUNCTION THAT HANDLES DOWNLOADING TASKS
         public void StartDownloading(FileSeed fileSeed)
         {
             try
@@ -128,7 +130,7 @@ namespace DuckTorrentClient
             }
         }
 
-
+        //FUNCTION THAT HANDLES SPECIFIC CHUNK OF THE DOWNLOAD TASK
         private Byte[] SinglePartDownload(TcpClient tcpClient, int ChunkSize, int initPos, FileSeed fileSeed)
         {
             try
@@ -156,6 +158,8 @@ namespace DuckTorrentClient
                 return null;
             }
         }
+
+        //CANCEL ALL CURRENT DOWNLOADS
         public void StopDownloading()
         {
             foreach (var keyval in this.DownloadingClients)

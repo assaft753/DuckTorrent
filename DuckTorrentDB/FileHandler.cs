@@ -11,6 +11,9 @@ namespace DuckTorrentDB
 
         public FileHandler() { }
 
+
+
+        //GET ALL NUMBER OF FILES
         public int GetNumberOfFiles()
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
@@ -22,6 +25,7 @@ namespace DuckTorrentDB
             }
         }
 
+        //GET ALL NAMES OF  FILE EXISTS
         public List<File> GetFilesByName(String name)
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
@@ -35,6 +39,7 @@ namespace DuckTorrentDB
             }
         }
 
+        //ADD FILES FOR USER
         public void AddFiles(String ip, int port, String userName, List<DuckTorrentClasses.File> files)
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
@@ -53,6 +58,7 @@ namespace DuckTorrentDB
             }
         }
 
+        //REMOVE FILE BELONGS TO USER
         public void RemoveFiles(String userName)
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
@@ -68,6 +74,8 @@ namespace DuckTorrentDB
 
         }
 
+
+        //FIND FILE FOR USER BY FILENAME
         public Dictionary<String, FileSeed> FindFile(string fileName, string userName)
         {
             using (DuckTorrentDBEntities db = new DuckTorrentDBEntities())
@@ -112,6 +120,7 @@ namespace DuckTorrentDB
             }
         }
 
+        //REFRESH LIST OF FILES FOR USER
         public void RefreshFiles(String ip, int port, String userName, List<DuckTorrentClasses.File> files)
         {
             this.RemoveFiles(userName);
